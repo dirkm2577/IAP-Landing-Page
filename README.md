@@ -1,2 +1,17 @@
 # IAP-Landing-Page
-IAPs Landing Page
+
+Static landing page for the Identity Anchor Protocol Registry.
+
+## Files
+
+- `index.html`
+- `styles.css`
+
+## Run locally
+
+```bash
+cd /Users/Dirk/code/IAP/IAP-Landing-Page
+python3 -m http.server 5500
+```
+
+Open `http://localhost:5500`.

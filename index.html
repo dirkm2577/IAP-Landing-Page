@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Identity Anchor Protocol Registry: cryptographically verifiable identity, continuity, and capability certification for autonomous agents."
+    />
+    <title>IAP Registry | Identity Anchor Protocol</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Registry</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="#what">Overview</a></li>
+            <li><a href="#workflow">How It Works</a></li>
+            <li><a href="#public-key">Public Key</a></li>
+            <li><a href="#trust">Trust & Security</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Protocol Infrastructure</p>
+            <h1 id="hero-title">
+              Identity Anchor Protocol
+              <span>A Registry for Persistent AI Identity</span>
+            </h1>
+            <p class="hero-subhead">
+              Cryptographically verifiable identity, continuity, and capability
+              certification for autonomous agents.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="/registry/public-key">View Registry Public Key</a>
+              <a class="btn btn-secondary" href="/docs">Read Documentation</a>
+            </div>
+          </div>
+          <aside class="status-card" aria-label="Registry status">
+            <h2>Registry Status</h2>
+            <p id="status-badge" class="status status-ok" role="status" aria-live="polite">
+              Operational
+            </p>
+            <p class="status-note">Live check uses <code>/health</code>. Falls back to static status when unavailable.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="what" class="section" aria-labelledby="what-title">
+        <div class="container">
+          <h2 id="what-title">What It Is</h2>
+          <p>
+            Identity Anchor Protocol (IAP) provides a public verification layer for
+            autonomous agents through signed, immutable attestations.
+          </p>
+          <ul class="feature-list">
+            <li>Continuity Certificates</li>
+            <li>Capability Certificates</li>
+            <li>Alignment Verification</li>
+            <li>Public cryptographic anchoring</li>
+          </ul>
+          <p>This is infrastructure for trustworthy AI agents.</p>
+        </div>
+      </section>
+
+      <section id="workflow" class="section section-alt" aria-labelledby="workflow-title">
+        <div class="container">
+          <h2 id="workflow-title">How It Works</h2>
+          <div class="flow" aria-label="Agent to registry certificate flow">
+            <div class="flow-box">
+              <h3>Agent</h3>
+              <p>Generates identity keypair and submits signed state + metadata.</p>
+            </div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-box">
+              <h3>Registry</h3>
+              <p>Validates identity, continuity, and protocol constraints.</p>
+            </div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-box">
+              <h3>Certificate</h3>
+              <p>Issues signed certificate for independent third-party verification.</p>
+            </div>
+          </div>
+          <ol class="steps">
+            <li>Agent generates identity keypair</li>
+            <li>Registry verifies state and metadata</li>
+            <li>Signed certificate is issued</li>
+            <li>Third parties verify against the registry public key</li>
+          </ol>
+          <pre class="code-block"><code>curl https://registry.ia-protocol.com/registry/public-key</code></pre>
+        </div>
+      </section>
+
+      <section id="public-key" class="section" aria-labelledby="key-title">
+        <div class="container">
+          <h2 id="key-title">Registry Public Key</h2>
+          <p>
+            The registry exposes a canonical public verification endpoint.
+          </p>
+          <dl class="cert-block" aria-live="polite">
+            <div>
+              <dt>registry_id</dt>
+              <dd id="registry-id">iap-registry-main</dd>
+            </div>
+            <div>
+              <dt>protocol_version</dt>
+              <dd id="protocol-version">IAP-0.1</dd>
+            </div>
+            <div>
+              <dt>public_key_b64</dt>
+              <dd id="public-key" class="mono">
+                pending: fetch /registry/public-key
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="trust" class="section section-alt" aria-labelledby="trust-title">
+        <div class="container">
+          <h2 id="trust-title">Trust & Security</h2>
+          <ul class="trust-list">
+            <li>All certificates are signed with the registry private key.</li>
+            <li>The public key is published for independent verification.</li>
+            <li>Certificates are verifiable without registry availability.</li>
+            <li>Issued records are immutable and append-only.</li>
+            <li>Persistent storage uses a Postgres-backed production deployment.</li>
+            <li>Protocol behavior is versioned and pinned to IAP-0.1.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Registry Version: 0.2.0</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/dirkm2577" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var statusEl = document.getElementById("status-badge");
+        var registryIdEl = document.getElementById("registry-id");
+        var protocolEl = document.getElementById("protocol-version");
+        var publicKeyEl = document.getElementById("public-key");
+
+        function requestJSON(path, onSuccess, onFail) {
+          fetch(path, { method: "GET", headers: { Accept: "application/json" } })
+            .then(function (res) {
+              if (!res.ok) throw new Error("HTTP " + res.status);
+              return res.json();
+            })
+            .then(onSuccess)
+            .catch(onFail);
+        }
+
+        requestJSON(
+          "/health",
+          function (data) {
+            if (data && data.status === "ok") {
+              statusEl.textContent = "Registry Online";
+              statusEl.className = "status status-ok";
+            } else {
+              statusEl.textContent = "Degraded";
+              statusEl.className = "status status-warn";
+            }
+          },
+          function () {
+            statusEl.textContent = "Operational";
+            statusEl.className = "status status-ok";
+          }
+        );
+
+        requestJSON(
+          "/registry/public-key",
+          function (data) {
+            registryIdEl.textContent = data.registry_id || "unknown";
+            protocolEl.textContent = data.protocol_version || "unknown";
+            publicKeyEl.textContent = data.public_key_b64 || "unavailable";
+          },
+          function () {
+            publicKeyEl.textContent = "unavailable: endpoint not reachable";
+          }
+        );
+      })();
+    </script>
+  </body>
+</html>
