@@ -15,3 +15,11 @@ python3 -m http.server 5500
 ```
 
 Open `http://localhost:5500`.
+
+## Deploy
+
+GitHub Pages deploy is automated via:
+
+- `.github/workflows/pages.yml`
+
+Every push to `main` publishes the static site.

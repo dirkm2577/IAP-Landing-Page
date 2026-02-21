@@ -8,6 +8,7 @@
       content="Identity Anchor Protocol Registry: cryptographically verifiable identity, continuity, and capability certification for autonomous agents."
     />
     <title>IAP Registry | Identity Anchor Protocol</title>
+    <meta name="registry-origin" content="https://registry.ia-protocol.com" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -41,8 +42,12 @@
               certification for autonomous agents.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="/registry/public-key">View Registry Public Key</a>
-              <a class="btn btn-secondary" href="/docs">Read Documentation</a>
+              <a class="btn btn-primary" href="https://registry.ia-protocol.com/registry/public-key"
+                >View Registry Public Key</a
+              >
+              <a class="btn btn-secondary" href="https://registry.ia-protocol.com/docs"
+                >Read Documentation</a
+              >
             </div>
           </div>
           <aside class="status-card" aria-label="Registry status">
@@ -50,7 +55,9 @@
             <p id="status-badge" class="status status-ok" role="status" aria-live="polite">
               Operational
             </p>
-            <p class="status-note">Live check uses <code>/health</code>. Falls back to static status when unavailable.</p>
+            <p class="status-note">
+              Live check uses <code>/health</code>. Falls back to static status when unavailable.
+            </p>
           </aside>
         </div>
       </section>
@@ -119,7 +126,7 @@
             <div>
               <dt>public_key_b64</dt>
               <dd id="public-key" class="mono">
-                pending: fetch /registry/public-key
+                pending: fetch registry /registry/public-key
               </dd>
             </div>
           </dl>
@@ -160,9 +167,11 @@
         var registryIdEl = document.getElementById("registry-id");
         var protocolEl = document.getElementById("protocol-version");
         var publicKeyEl = document.getElementById("public-key");
+        var registryOriginMeta = document.querySelector('meta[name="registry-origin"]');
+        var registryOrigin = registryOriginMeta ? registryOriginMeta.content : "";
 
         function requestJSON(path, onSuccess, onFail) {
-          fetch(path, { method: "GET", headers: { Accept: "application/json" } })
+          fetch(registryOrigin + path, { method: "GET", headers: { Accept: "application/json" } })
             .then(function (res) {
               if (!res.ok) throw new Error("HTTP " + res.status);
               return res.json();
@@ -196,7 +205,7 @@
             publicKeyEl.textContent = data.public_key_b64 || "unavailable";
           },
           function () {
-            publicKeyEl.textContent = "unavailable: endpoint not reachable";
+            publicKeyEl.textContent = "unavailable: endpoint not reachable from this origin";
           }
         );
       })();
