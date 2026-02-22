@@ -135,7 +135,7 @@
             <div>
               <dt>public_key_b64</dt>
               <dd id="public-key" class="mono">
-                pending: fetch registry /registry/public-key
+                2rgJOfqr1KETG0vnHVzOlFXCt6UJYadxG+Uq6rObjH4=
               </dd>
             </div>
           </dl>
@@ -240,9 +240,7 @@
             protocolEl.textContent = data.protocol_version || "unknown";
             publicKeyEl.textContent = data.public_key_b64 || "unavailable";
           },
-          function () {
-            publicKeyEl.textContent = "unavailable: endpoint not reachable from this origin";
-          }
+          function () {}
         );
       })();
     </script>
