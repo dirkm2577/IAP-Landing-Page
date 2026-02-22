@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Identity Anchor Protocol Registry: cryptographically verifiable identity, continuity, and capability certification for autonomous agents."
-    />
+      <meta
+    name="description"
+    content="Identity Anchor Protocol (IAP) Registry: a Certificate Authority issuing Identity Anchor, Continuity, and Lineage certificates for autonomous agents—cryptographically verifiable offline."
+      />
     <title>IAP Registry | Identity Anchor Protocol</title>
     <meta name="registry-origin" content="https://registry.ia-protocol.com" />
     <link rel="stylesheet" href="styles.css" />
@@ -37,16 +37,22 @@
               Identity Anchor Protocol
               <span>A Registry for Persistent AI Identity</span>
             </h1>
-            <p class="hero-subhead">
-              Cryptographically verifiable identity, continuity, and capability
-              certification for autonomous agents.
-            </p>
+              <p class="hero-subhead">
+                A cryptographic Certificate Authority (CA) for autonomous agents—issuing Identity Anchor, Continuity, and Lineage certificates under IAP-0.1.
+                Certificates are independently verifiable offline using the registry public key.
+              </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="https://registry.ia-protocol.com/registry/public-key"
                 >View Registry Public Key</a
               >
               <a class="btn btn-secondary" href="https://registry.ia-protocol.com/docs"
                 >Read Documentation</a
+              >
+              <a
+                class="btn btn-secondary"
+                href="https://github.com/identity-anchor-protocol/iap-spec"
+                rel="noopener noreferrer"
+                >Protocol Specification (v0.1)</a
               >
             </div>
           </div>
@@ -66,16 +72,19 @@
         <div class="container">
           <h2 id="what-title">What It Is</h2>
           <p>
-            Identity Anchor Protocol (IAP) provides a public verification layer for
-            autonomous agents through signed, immutable attestations.
+            Identity Anchor Protocol (IAP) defines a cryptographic standard for establishing and verifying persistent agent identity and continuity.
+            The Registry implements IAP-0.1 as a Certificate Authority (CA), issuing signed certificates that third parties can verify using the Registry public key.
           </p>
+      
           <ul class="feature-list">
-            <li>Continuity Certificates</li>
-            <li>Capability Certificates</li>
-            <li>Alignment Verification</li>
-            <li>Public cryptographic anchoring</li>
+            <li><strong>Identity Anchor</strong> — binds <code>agent_id</code> to an Ed25519 public key at a specific time.</li>
+            <li><strong>Continuity</strong> — attests a specific identity-bound <code>memory_root</code> and strictly monotonic <code>ledger_sequence</code>.</li>
+            <li><strong>Lineage</strong> — declares canonical parent/fork relationships between identities.</li>
           </ul>
-          <p>This is infrastructure for trustworthy AI agents.</p>
+      
+          <p class="note">
+            IAP does not define agent behavior, intelligence, governance, or evaluation criteria—only identity and continuity primitives.
+          </p>
         </div>
       </section>
 
@@ -85,24 +94,24 @@
           <div class="flow" aria-label="Agent to registry certificate flow">
             <div class="flow-box">
               <h3>Agent</h3>
-              <p>Generates identity keypair and submits signed state + metadata.</p>
+              <p>Generates an Ed25519 keypair, derives <code>agent_id</code>, and submits signed certificate requests.</p>
             </div>
             <div class="flow-arrow" aria-hidden="true">→</div>
             <div class="flow-box">
               <h3>Registry</h3>
-              <p>Validates identity, continuity, and protocol constraints.</p>
+              <p>Verifies protocol rules and agent signatures, then issues registry-signed certificates under IAP-0.1.</p>
             </div>
             <div class="flow-arrow" aria-hidden="true">→</div>
             <div class="flow-box">
               <h3>Certificate</h3>
-              <p>Issues signed certificate for independent third-party verification.</p>
+              <p>Immutable signed attestations verifiable offline using the registry public key.</p>
             </div>
           </div>
           <ol class="steps">
-            <li>Agent generates identity keypair</li>
-            <li>Registry verifies state and metadata</li>
-            <li>Signed certificate is issued</li>
-            <li>Third parties verify against the registry public key</li>
+            <li>Agent generates an Ed25519 keypair and derives <code>agent_id</code>.</li>
+            <li>Registry issues an <strong>Identity Anchor</strong> certificate binding <code>agent_id</code> to the public key.</li>
+            <li>Agent requests <strong>Continuity</strong> or <strong>Lineage</strong> certificates with an agent signature.</li>
+            <li>Any verifier validates certificates offline using canonical JSON and the registry public key.</li>
           </ol>
           <pre class="code-block"><code>curl https://registry.ia-protocol.com/registry/public-key</code></pre>
         </div>
@@ -137,13 +146,35 @@
         <div class="container">
           <h2 id="trust-title">Trust & Security</h2>
           <ul class="trust-list">
-            <li>All certificates are signed with the registry private key.</li>
-            <li>The public key is published for independent verification.</li>
-            <li>Certificates are verifiable without registry availability.</li>
-            <li>Issued records are immutable and append-only.</li>
-            <li>Persistent storage uses a Postgres-backed production deployment.</li>
-            <li>Protocol behavior is versioned and pinned to IAP-0.1.</li>
+            <li>All certificates are signed with the registry’s Ed25519 private key (trust root).</li>
+            <li>Verification uses canonical JSON and excludes <code>registry_signature_b64</code> from the signed payload.</li>
+            <li>Verification MUST NOT require registry availability—offline verification is required.</li>
+            <li>Certificates are immutable once issued (append-only record).</li>
+            <li>Identity Anchor certificates are required prior to Continuity or Lineage issuance for an <code>agent_id</code>.</li>
+            <li>Protocol behavior is pinned to <code>IAP-0.1</code> and certificate types are versioned.</li>
           </ul>
+        </div>
+      </section>
+
+      <section id="spec" class="section" aria-labelledby="spec-title">
+        <div class="container">
+          <h2 id="spec-title">Protocol Specification</h2>
+          <p>
+            Canonical specification source (versioned, auditable history):
+            <a
+              href="https://github.com/identity-anchor-protocol/iap-spec"
+              rel="noopener noreferrer"
+              >github.com/identity-anchor-protocol/iap-spec</a
+            >
+          </p>
+          <p>
+            Version-pinned document:
+            <a
+              href="https://github.com/identity-anchor-protocol/iap-spec/blob/main/IAP-Protocol-Specification-v0.1.md"
+              rel="noopener noreferrer"
+              >IAP-Protocol-Specification-v0.1.md</a
+            >
+          </p>
         </div>
       </section>
     </main>
@@ -156,6 +187,11 @@
         </div>
         <ul class="footer-links">
           <li><a href="https://github.com/dirkm2577" rel="noopener noreferrer">GitHub</a></li>
+          <li>
+            <a href="https://github.com/identity-anchor-protocol/iap-spec" rel="noopener noreferrer"
+              >Spec Repo</a
+            >
+          </li>
           <li><a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></li>
         </ul>
       </div>
