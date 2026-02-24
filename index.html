@@ -95,19 +95,32 @@
           <div class="flow" aria-label="IAP certificate flow">
             <div class="flow-box">
               <h3>Identity Anchor</h3>
-              <p>Create a verifiable identity anchor for an agent key.</p>
+              <p>Bind an agent’s <strong>public key</strong> to a stable <strong>agent_id</strong> with a Registry-signed certificate. This is the “birth certificate” for an agent identity: one anchor per key, verifiable offline, used as the trust root for all future continuity proofs.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
               <h3>Continuity</h3>
-              <p>Attest time-sequenced continuity commitments over time.</p>
+              <p>Prove that the <em>same</em> anchored agent made specific, ordered commitments over time. Each certificate attests a <strong>memory_root</strong> and <strong>sequence</strong> (from AMCS) signed by the agent key, then countersigned by the Registry with a timestamp. Verifiers check signature validity and monotonic sequence.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
               <h3>Lineage</h3>
-              <p>Declare derivation relationships across forks or identity succession.</p>
+              <p>Declare how an identity evolves across upgrades, migrations, or forks. A Lineage certificate links a <strong>child</strong> identity to a <strong>parent</strong> (or predecessor) and records the declared relationship (e.g., fork, successor, migration). This makes “this new agent came from that one” auditable and portable.</p>
             </div>
           </div>
+
+          <div class="callout prose" role="note" aria-label="How it works notes">
+            <p><strong>AMCS</strong> (Agent Memory Canonicalization Standard) is a local, append-only log format that produces a deterministic
+              <code>memory_root</code> (Merkle root) and an increasing <code>sequence</code>. IAP does not read your raw memory—only these compact commitments.
+            </p>
+            <p>
+              Want the step-by-step flow without jargon? Use the user manual below.
+            </p>
+            <div class="hero-actions" style="margin-top:0.6rem">
+              <a class="btn btn-secondary" href="iap-user-manual.html">Open the non-technical user manual</a>
+            </div>
+          </div>
+
         </div>
       </section>
 
