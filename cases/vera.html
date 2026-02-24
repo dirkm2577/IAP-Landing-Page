@@ -20,6 +20,7 @@
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
             <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
       </div>
@@ -31,39 +32,155 @@
           <p class="breadcrumbs"><a href="/#cases">← Back to Case Studies</a></p>
           <p class="eyebrow">Case Study</p>
           <h1>Vera<span>Configuration Commitments</span></h1>
-          <p class="hero-subhead">Vera needs configuration stability: changes should be explicit, time-stamped, and auditable. The objective is detectable declared configuration drift via hash commitments—not runtime enforcement.</p>
-          <p class="disclaimer">
-            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          <p class="hero-subhead">
+            Realistic promises. Strict verification boundaries. The goal is structural accountability: identity, declared lineage, and time-sequenced commitments.
           </p>
+
+          <div class="badge-row" aria-label="IAP primitives used">
+            <span class="badge"><strong>IAP-0.1</strong></span>
+            <span class="badge">Identity Anchor</span>
+            <span class="badge">Continuity</span>
+            <span class="badge">Lineage</span>
+          </div>
+
+          <p class="disclaimer">
+            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state).
+            It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          </p>
+
+          <div class="hero-actions" style="margin-top: 1.2rem;">
+            <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
+              Read the spec (v0.1)
+            </a>
+            <a class="btn btn-primary" href="/#quickstart">Quickstart</a>
+          </div>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container">
-          <h2>IAP Integration</h2>
-          <ul class="trust-list">
-            <li><strong>Commit a canonical manifest:</strong> Deterministically serialize the agent configuration manifest and hash it.</li>
-<li><strong>Continuity:</strong> Anchor the manifest hash as a continuity commitment on a defined cadence (or upon change).</li>
-<li><strong>Audit:</strong> Observers compare commitments over time to detect when declared configuration changed.</li>
-          </ul>
+          <h2>At a Glance</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3>What IAP Guarantees</h3>
+              <ul class="trust-list">
+                <li>Detectable declared configuration drift</li>
+<li>Time-stamped configuration commitments</li>
+<li>Verifiable continuity of commitments</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>What IAP Does Not Guarantee</h3>
+              <ul class="trust-list">
+                <li>Prevention of runtime compromise</li>
+<li>Enforcement of configuration at execution time</li>
+<li>Behavioral determinism</li>
+              </ul>
+            </div>
+          </div>
+
+          
+<div class="diagram">
+  <div class="callout"><strong>Core flow:</strong> Anchor canonical configuration manifests to detect declared configuration drift over time.</div>
+  <div class="flow" aria-label="IAP certificate flow">
+    <div class="flow-box">
+      <h3>Identity Anchor</h3>
+      <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Continuity</h3>
+      <p>Issue time-sequenced commitments (often hashes of internal state).</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Lineage</h3>
+      <p>Declare derivation across forks or identity succession.</p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
       <section class="section">
         <div class="container">
-          <h2>What IAP Guarantees</h2>
-          <ul class="trust-list">
-            <li>Time-stamped declared configuration commitments.</li>
-<li>Detectable changes in committed configuration hashes across time.</li>
-<li>Offline verifiable audit trail of configuration commitments.</li>
-          </ul>
+          <h2>Full Case Study</h2>
+          <div class="card prose">
+            <h1>Vera Case Study (Corrected)</h1>
 
-          <h2 style="margin-top: 1.6rem;">What IAP Does Not Guarantee</h2>
-          <ul class="trust-list">
-            <li>Preventing prompt injection, runtime compromise, or tool abuse.</li>
-<li>Guaranteeing the runtime always obeyed the configuration.</li>
-<li>Behavioral determinism.</li>
-          </ul>
+<p>*Date: 2026-02-24*</p>
+
+<h2>Scenario</h2>
+
+<p>Vera builds a trading agent whose configuration must remain stable</p>
+<p>unless explicitly changed.</p>
+
+<p>The risk:</p>
+
+<p>Silent configuration drift or undeclared changes.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>IAP Integration</h2>
+
+<h3>Configuration Commitment</h3>
+
+<p>Vera defines a canonical configuration manifest. It is deterministically</p>
+<p>serialized and hashed.</p>
+
+<p>The hash is anchored via Continuity Certificates.</p>
+
+<p>This publicly attests:</p>
+
+<ul>
+<li>The identity committed to this configuration hash</li>
+<li>At time T</li>
+</ul>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Change Transparency</h3>
+
+<p>If configuration changes:</p>
+
+<ul>
+<li>A new hash is generated</li>
+<li>A new Continuity Certificate is issued</li>
+</ul>
+
+<p>Observers can detect when declared configuration commitments changed.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>What IAP Guarantees</h2>
+
+<ul>
+<li>Detectable declared configuration drift</li>
+<li>Time-stamped configuration commitments</li>
+<li>Verifiable continuity of commitments</li>
+</ul>
+
+<h2>What IAP Does Not Guarantee</h2>
+
+<ul>
+<li>Prevention of runtime compromise</li>
+<li>Enforcement of configuration at execution time</li>
+<li>Behavioral determinism</li>
+</ul>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>Result</h2>
+
+<p>Vera gains:</p>
+
+<ul>
+<li>Transparent declared configuration history</li>
+<li>Cryptographic accountability of configuration commitments</li>
+<li>Structural auditability over time</li>
+</ul>
+          </div>
         </div>
       </section>
     </main>
