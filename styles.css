@@ -355,63 +355,6 @@ h2 {
   .nav-list {
     flex-wrap: wrap;
   }
-
-  .tiles {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .tile {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.2rem;
-    box-shadow: var(--shadow);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  
-  .tile:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(12, 24, 36, 0.12);
-  }
-  
-  .tile-sub {
-    font-size: 0.9rem;
-    color: var(--primary);
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  
-  .pricing-grid {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .price-card {
-    background: var(--surface);
-    border: 2px solid var(--primary);
-    border-radius: 14px;
-    padding: 1.2rem;
-    text-align: center;
-  }
-  
-  .price {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--primary);
-    margin: 0.5rem 0;
-  }
-  
-  @media (min-width: 900px) {
-    .tiles {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .pricing-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
 }
 
 
@@ -616,6 +559,7 @@ h2 {
 .prose ul { margin: 0.8rem 0 0.8rem 1.2rem; }
 .prose code { background: rgba(255,255,255,0.55); padding: 0.1rem 0.35rem; border-radius: 8px; border: 1px solid var(--border); }
 .prose pre { overflow:auto; padding: 1rem; background: rgba(255,255,255,0.55); border: 1px solid var(--border); border-radius: 12px; }
+.prose { max-width: 80ch; }
 
 @media (min-width: 900px) {
   .card-grid {
