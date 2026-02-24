@@ -20,6 +20,7 @@
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
             <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
       </div>
@@ -31,39 +32,165 @@
           <p class="breadcrumbs"><a href="/#cases">← Back to Case Studies</a></p>
           <p class="eyebrow">Case Study</p>
           <h1>Olympia<span>Multi-Agent Coordination</span></h1>
-          <p class="hero-subhead">Olympia is a coordinator agent for multi-agent systems. The goal is to make coordination authority auditable via identity and time-sequenced commitments, not to enforce governance legitimacy.</p>
-          <p class="disclaimer">
-            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          <p class="hero-subhead">
+            Realistic promises. Strict verification boundaries. The goal is structural accountability: identity, declared lineage, and time-sequenced commitments.
           </p>
+
+          <div class="badge-row" aria-label="IAP primitives used">
+            <span class="badge"><strong>IAP-0.1</strong></span>
+            <span class="badge">Identity Anchor</span>
+            <span class="badge">Continuity</span>
+            <span class="badge">Lineage</span>
+          </div>
+
+          <p class="disclaimer">
+            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state).
+            It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          </p>
+
+          <div class="hero-actions" style="margin-top: 1.2rem;">
+            <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
+              Read the spec (v0.1)
+            </a>
+            <a class="btn btn-primary" href="/#quickstart">Quickstart</a>
+          </div>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container">
-          <h2>IAP Integration</h2>
-          <ul class="trust-list">
-            <li><strong>Identity Anchor:</strong> Anchor Olympia’s coordinator identity with a Registry-signed certificate.</li>
-<li><strong>Continuity:</strong> Commit deterministic hashes of coordination event roots at meaningful checkpoints (e.g., release, deployment, milestone).</li>
-<li><strong>Lineage:</strong> For upgrades or identity succession, create a new identity and link it to the previous via Lineage. Continuity continues on the new chain.</li>
-          </ul>
+          <h2>At a Glance</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3>What IAP Guarantees</h3>
+              <ul class="trust-list">
+                <li>Coordinator identity persistence</li>
+<li>Sequenced continuity commitments</li>
+<li>Verifiable declared derivation across upgrades</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>What IAP Does Not Guarantee</h3>
+              <ul class="trust-list">
+                <li>Prevention of internal tampering</li>
+<li>Enforcement of governance legitimacy</li>
+<li>Automatic canonical status among forks</li>
+              </ul>
+            </div>
+          </div>
+
+          
+<div class="diagram">
+  <div class="callout"><strong>Core flow:</strong> Anchor coordination checkpoints so upgrades and derived instances remain structurally auditable.</div>
+  <div class="flow" aria-label="IAP certificate flow">
+    <div class="flow-box">
+      <h3>Identity Anchor</h3>
+      <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Continuity</h3>
+      <p>Issue time-sequenced commitments (often hashes of internal state).</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Lineage</h3>
+      <p>Declare derivation across forks or identity succession.</p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
       <section class="section">
         <div class="container">
-          <h2>What IAP Guarantees</h2>
-          <ul class="trust-list">
-            <li>Coordinator identity persistence and auditability over time.</li>
-<li>Sequenced commitments that can be verified offline.</li>
-<li>Declared derivation transparency across upgrades.</li>
-          </ul>
+          <h2>Full Case Study</h2>
+          <div class="card prose">
+            <h1>Olympia Case Study (Corrected)</h1>
 
-          <h2 style="margin-top: 1.6rem;">What IAP Does Not Guarantee</h2>
-          <ul class="trust-list">
-            <li>Enforcement of canonical authority or governance legitimacy.</li>
-<li>Guarantees that internal logs were not tampered with (beyond what the committed hash and local assumptions provide).</li>
-<li>Behavioral correctness of coordination decisions.</li>
-          </ul>
+<p>*Date: 2026-02-24*</p>
+
+<h2>Scenario</h2>
+
+<p>Olympia is a multi-agent coordination system managing task agents,</p>
+<p>financial agents, and research agents.</p>
+
+<p>The challenge:</p>
+
+<p>&gt; How can we verify that the coordinating authority remains</p>
+<p>&gt; cryptographically continuous over time?</p>
+
+<p>IAP anchors identity and declared commitments --- not behavioral</p>
+<p>integrity.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>IAP Integration</h2>
+
+<h3>Identity Anchor</h3>
+
+<p>Olympia derives a deterministic agent_id from its public key. The</p>
+<p>Registry issues an Identity Anchor Certificate.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Continuity</h3>
+
+<p>Olympia records coordination events internally. It computes a</p>
+<p>deterministic root hash of recorded events and anchors it via Continuity</p>
+<p>Certificates.</p>
+
+<p>This provides tamper-evidence for what Olympia declares --- assuming its</p>
+<p>internal ledger integrity assumptions hold.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Upgrade or Key Change</h3>
+
+<p>If Olympia upgrades and rotates keys:</p>
+
+<ul>
+<li>A new identity is created</li>
+<li>A Lineage Certificate links it to the prior identity</li>
+</ul>
+
+<p>The new identity starts its own continuity chain. Observers verify</p>
+<p>declared lineage relationships.</p>
+
+<p>IAP does not enforce canonical authority. It provides structural</p>
+<p>transparency.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>What IAP Guarantees</h2>
+
+<ul>
+<li>Coordinator identity persistence</li>
+<li>Sequenced continuity commitments</li>
+<li>Verifiable declared derivation across upgrades</li>
+</ul>
+
+<h2>What IAP Does Not Guarantee</h2>
+
+<ul>
+<li>Prevention of internal tampering</li>
+<li>Enforcement of governance legitimacy</li>
+<li>Automatic canonical status among forks</li>
+</ul>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>Result</h2>
+
+<p>Olympia gains:</p>
+
+<ul>
+<li>Transparent declared upgrades</li>
+<li>Verifiable identity continuity</li>
+<li>Observable lineage transitions</li>
+</ul>
+          </div>
         </div>
       </section>
     </main>
