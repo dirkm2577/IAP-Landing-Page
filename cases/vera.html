@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Vera case study for the Identity Anchor Protocol (IAP)." />
+    <title>Vera | IAP Case Study</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="/#overview">Overview</a></li>
+            <li><a href="/#how">How It Works</a></li>
+            <li><a href="/#cases">Case Studies</a></li>
+            <li><a href="/#quickstart">Quickstart</a></li>
+            <li><a href="/#public-key">Public Key</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="case-hero">
+        <div class="container">
+          <p class="breadcrumbs"><a href="/#cases">← Back to Case Studies</a></p>
+          <p class="eyebrow">Case Study</p>
+          <h1>Vera<span>Configuration Commitments</span></h1>
+          <p class="hero-subhead">Vera needs configuration stability: changes should be explicit, time-stamped, and auditable. The objective is detectable declared configuration drift via hash commitments—not runtime enforcement.</p>
+          <p class="disclaimer">
+            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container">
+          <h2>IAP Integration</h2>
+          <ul class="trust-list">
+            <li><strong>Commit a canonical manifest:</strong> Deterministically serialize the agent configuration manifest and hash it.</li>
+<li><strong>Continuity:</strong> Anchor the manifest hash as a continuity commitment on a defined cadence (or upon change).</li>
+<li><strong>Audit:</strong> Observers compare commitments over time to detect when declared configuration changed.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What IAP Guarantees</h2>
+          <ul class="trust-list">
+            <li>Time-stamped declared configuration commitments.</li>
+<li>Detectable changes in committed configuration hashes across time.</li>
+<li>Offline verifiable audit trail of configuration commitments.</li>
+          </ul>
+
+          <h2 style="margin-top: 1.6rem;">What IAP Does Not Guarantee</h2>
+          <ul class="trust-list">
+            <li>Preventing prompt injection, runtime compromise, or tool abuse.</li>
+<li>Guaranteeing the runtime always obeyed the configuration.</li>
+<li>Behavioral determinism.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">IAP-0.1: Identity Anchor • Continuity • Lineage</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/identity-anchor-protocol/iap-spec" rel="noopener noreferrer">Spec Repo</a></li>
+          <li><a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
