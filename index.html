@@ -94,17 +94,17 @@
           <h2>Minimal Universal Primitive</h2>
           <div class="flow" aria-label="IAP certificate flow">
             <div class="flow-box">
-              <h3>Identity Anchor</h3>
+              <h3>Identity Anchor Certificate</h3>
               <p>Bind an agent’s <strong>public key</strong> to a stable <strong>agent_id</strong> with a Registry-signed certificate. This is the “birth certificate” for an agent identity: one anchor per key, verifiable offline, used as the trust root for all future continuity proofs.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Continuity</h3>
+              <h3>Continuity Certificate</h3>
               <p>Prove that the <em>same</em> anchored agent made specific, ordered commitments over time. Each certificate attests a <strong>memory_root</strong> and <strong>sequence</strong> (from AMCS) signed by the agent key, then countersigned by the Registry with a timestamp. Verifiers check signature validity and monotonic sequence.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Lineage</h3>
+              <h3>Lineage Certificate</h3>
               <p>Declare how an identity evolves across upgrades, migrations, or forks. A Lineage certificate links a <strong>child</strong> identity to a <strong>parent</strong> (or predecessor) and records the declared relationship (e.g., fork, successor, migration). This makes “this new agent came from that one” auditable and portable.</p>
             </div>
           </div>
@@ -117,7 +117,7 @@
               Want the step-by-step flow without jargon? Use the user manual below.
             </p>
             <div class="hero-actions" style="margin-top:0.6rem">
-              <a class="btn btn-secondary" href="iap-user-manual.html">Open the non-technical user manual</a>
+              <a class="btn btn-secondary" href="iap-user-manual.html">Open the user manual</a>
             </div>
           </div>
 
