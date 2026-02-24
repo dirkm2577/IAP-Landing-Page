@@ -23,7 +23,7 @@
             <li><a href="#how">How It Works</a></li>
             <li><a href="#cases">Case Studies</a></li>
             <li><a href="#quickstart">Quickstart</a></li>
-            <li><a href="#public-key">Public Key</a></li>
+            <li><a href="#registry-public-key">Public Key</a></li>
             <li><a href="#trust">Trust & Security</a></li>
           </ul>
         </nav>
@@ -190,7 +190,7 @@ iap-agent verify certificate.json</code></pre>
       </section>
 
       <!-- PUBLIC KEY -->
-      <section id="public-key" class="section" aria-labelledby="pk-title">
+      <section id="registry-public-key" class="section" aria-labelledby="pk-title">
         <div class="container">
           <h2 id="pk-title">Registry Public Key</h2>
           <p>
@@ -208,7 +208,7 @@ iap-agent verify certificate.json</code></pre>
             </div>
             <div class="kv-row">
               <div class="kv-key">Public Key (base64)</div>
-              <div class="kv-val mono" id="public-key-b64">loading…</div>
+              <div class="kv-val mono" id="registry-public-key-b64">loading…</div>
             </div>
           </div>
         </div>
@@ -249,7 +249,7 @@ iap-agent verify certificate.json</code></pre>
         var statusEl = document.getElementById("status-badge");
         var registryIdEl = document.getElementById("registry-id");
         var protocolEl = document.getElementById("protocol-version");
-        var publicKeyEl = document.getElementById("public-key-b64");
+        var publicKeyEl = document.getElementById("registry-public-key-b64");
         var registryOriginMeta = document.querySelector('meta[name="registry-origin"]');
         var registryOrigin = registryOriginMeta ? registryOriginMeta.content : "";
 
