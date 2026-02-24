@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta
-    name="description"
-    content="Identity Anchor Protocol (IAP) Registry: a Certificate Authority issuing Identity Anchor, Continuity, and Lineage certificates for autonomous agents—cryptographically verifiable offline."
-      />
+    <meta
+      name="description"
+      content="Identity Anchor Protocol (IAP) Registry: a Certificate Authority issuing Identity Anchor, Continuity, and Lineage certificates for autonomous agents—cryptographically verifiable offline."
+    />
     <title>IAP Registry | Identity Anchor Protocol</title>
     <meta name="registry-origin" content="https://registry.ia-protocol.com" />
     <link rel="stylesheet" href="styles.css" />
@@ -19,8 +19,10 @@
         <p class="brand">Identity Anchor Protocol Registry</p>
         <nav aria-label="Primary">
           <ul class="nav-list">
-            <li><a href="#what">Overview</a></li>
-            <li><a href="#workflow">How It Works</a></li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#cases">Case Studies</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
             <li><a href="#public-key">Public Key</a></li>
             <li><a href="#trust">Trust & Security</a></li>
           </ul>
@@ -29,152 +31,199 @@
     </header>
 
     <main id="main">
+      <!-- HERO -->
       <section class="hero" aria-labelledby="hero-title">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">Protocol Infrastructure</p>
+            <p class="eyebrow">Agent Web Infrastructure</p>
             <h1 id="hero-title">
-              Identity Anchor Protocol
-              <span>A Registry for Persistent AI Identity</span>
+              Identity & Continuity
+              <span>for Persistent Autonomous Agents</span>
             </h1>
-              <p class="hero-subhead">
-                A cryptographic Certificate Authority (CA) for autonomous agents—issuing Identity Anchor, Continuity, and Lineage certificates under IAP-0.1.
-                Certificates are independently verifiable offline using the registry public key.
-              </p>
+            <p class="hero-subhead">
+              Prove that the same cryptographic agent identity made specific commitments at specific times — across restarts, upgrades, migrations, and forks.
+            </p>
+            <p class="hero-subhead">
+              Whenever an autonomous agent accumulates value over time, continuity becomes essential.
+            </p>
+
+            <p class="disclaimer">
+              IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+            </p>
+
             <div class="hero-actions">
-              <a class="btn btn-primary" href="https://registry.ia-protocol.com/registry/public-key"
-                >View Registry Public Key</a
-              >
-              <a class="btn btn-secondary" href="https://registry.ia-protocol.com/docs"
-                >Read Documentation</a
-              >
-              <a
-                class="btn btn-secondary"
-                href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/"
-                rel="noopener noreferrer"
-                >Protocol Specification (v0.1)</a
-              >
+              <a class="btn btn-primary" href="#quickstart">Get Started in 10 Minutes</a>
+              <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
+                Protocol Spec (v0.1)
+              </a>
             </div>
           </div>
+
           <aside class="status-card" aria-label="Registry status">
             <h2>Registry Status</h2>
-            <p id="status-badge" class="status status-ok" role="status" aria-live="polite">
-              Operational
-            </p>
+            <p id="status-badge" class="status status-ok">Operational</p>
             <p class="status-note">
-              Live check uses <code>/health</code>. Falls back to static status when unavailable.
+              Public key and certificates verifiable offline.
             </p>
           </aside>
         </div>
       </section>
 
-      <section id="what" class="section" aria-labelledby="what-title">
+      <!-- OVERVIEW -->
+      <section id="overview" class="section section-alt">
         <div class="container">
-          <h2 id="what-title">What It Is</h2>
+          <h2>The Agent Web Is Forming</h2>
           <p>
-            Identity Anchor Protocol (IAP) defines a cryptographic standard for establishing and verifying persistent agent identity and continuity.
-            The Registry implements IAP-0.1 as a Certificate Authority (CA), issuing signed certificates that third parties can verify using the Registry public key.
+            Payments. Search. Execution. Structured content.
+            Agent infrastructure is already in production.
           </p>
-      
-          <ul class="feature-list">
-            <li><strong>Identity Anchor</strong> — binds <code>agent_id</code> to an Ed25519 public key at a specific time.</li>
-            <li><strong>Continuity</strong> — attests a specific identity-bound <code>memory_root</code> and strictly monotonic <code>ledger_sequence</code>.</li>
-            <li><strong>Lineage</strong> — declares canonical parent/fork relationships between identities.</li>
-          </ul>
-      
-          <p class="note">
-            IAP does not define agent behavior, intelligence, governance, or evaluation criteria—only identity and continuity primitives.
+          <p>
+            But one primitive is still missing:
+            <strong>verifiable identity continuity.</strong>
+          </p>
+          <p>
+            Without continuity, agents cannot accumulate durable economic,
+            structural, or intellectual credibility.
           </p>
         </div>
       </section>
 
-      <section id="workflow" class="section section-alt" aria-labelledby="workflow-title">
+      <!-- HOW IT WORKS -->
+      <section id="how" class="section">
         <div class="container">
-          <h2 id="workflow-title">How It Works</h2>
-          <div class="flow" aria-label="Agent to registry certificate flow">
+          <h2>Minimal Universal Primitive</h2>
+          <div class="flow" aria-label="IAP certificate flow">
             <div class="flow-box">
-              <h3>Agent</h3>
-              <p>Generates an Ed25519 keypair, derives <code>agent_id</code>, and submits signed certificate requests.</p>
+              <h3>Identity Anchor</h3>
+              <p>Create a verifiable identity anchor for an agent key.</p>
             </div>
-            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Registry</h3>
-              <p>Verifies protocol rules and agent signatures, then issues registry-signed certificates under IAP-0.1.</p>
+              <h3>Continuity</h3>
+              <p>Attest time-sequenced continuity commitments over time.</p>
             </div>
-            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Certificate</h3>
-              <p>Immutable signed attestations verifiable offline using the registry public key.</p>
+              <h3>Lineage</h3>
+              <p>Declare derivation relationships across forks or identity succession.</p>
             </div>
           </div>
-          <ol class="steps">
-            <li>Agent generates an Ed25519 keypair and derives <code>agent_id</code>.</li>
-            <li>Registry issues an <strong>Identity Anchor</strong> certificate binding <code>agent_id</code> to the public key.</li>
-            <li>Agent requests <strong>Continuity</strong> or <strong>Lineage</strong> certificates with an agent signature.</li>
-            <li>Any verifier validates certificates offline using canonical JSON and the registry public key.</li>
-          </ol>
-          <pre class="code-block"><code>curl https://registry.ia-protocol.com/registry/public-key</code></pre>
         </div>
       </section>
 
-      <section id="public-key" class="section" aria-labelledby="key-title">
+      <!-- CASE STUDIES -->
+      <section id="cases" class="section section-alt">
         <div class="container">
-          <h2 id="key-title">Registry Public Key</h2>
-          <p>
-            The registry exposes a canonical public verification endpoint.
-          </p>
-          <dl class="cert-block" aria-live="polite">
-            <div>
-              <dt>registry_id</dt>
-              <dd id="registry-id">iap-registry-main</dd>
-            </div>
-            <div>
-              <dt>protocol_version</dt>
-              <dd id="protocol-version">IAP-0.1</dd>
-            </div>
-            <div>
-              <dt>public_key_b64</dt>
-              <dd id="public-key" class="mono">
-                2rgJOfqr1KETG0vnHVzOlFXCt6UJYadxG+Uq6rObjH4=
-              </dd>
-            </div>
-          </dl>
+          <h2>Case Studies</h2>
+
+          <div class="tiles" aria-label="Case study tiles">
+            <a class="tile" href="/cases/atlas.html">
+              <h3>Atlas</h3>
+              <p class="tile-sub">Financial Continuity</p>
+              <p>Identity and checkpoint continuity for economic agents operating over long horizons.</p>
+            </a>
+
+            <a class="tile" href="/cases/olympia.html">
+              <h3>Olympia</h3>
+              <p class="tile-sub">Multi-Agent Coordination</p>
+              <p>Continuity commitments for coordinator agents evolving across deployments and upgrades.</p>
+            </a>
+
+            <a class="tile" href="/cases/eric.html">
+              <h3>Eric</h3>
+              <p class="tile-sub">Research Provenance</p>
+              <p>Time-stamped provenance for research checkpoints and long-running computational work.</p>
+            </a>
+
+            <a class="tile" href="/cases/vera.html">
+              <h3>Vera</h3>
+              <p class="tile-sub">Configuration Commitments</p>
+              <p>Detectable declared configuration drift via hash commitments anchored over time.</p>
+            </a>
+          </div>
         </div>
       </section>
 
+      <!-- QUICKSTART -->
+      <section id="quickstart" class="section">
+        <div class="container">
+          <h2>Quickstart</h2>
+          <p>Issue your first continuity certificate in under 10 minutes.</p>
+          <pre class="code-block"><code>pip install iap-agent
+iap-agent init
+iap-agent anchor issue
+iap-agent flow run
+iap-agent verify certificate.json</code></pre>
+        </div>
+      </section>
+
+      <!-- PRICING -->
+      <section class="section section-alt" aria-labelledby="pricing-title">
+        <div class="container">
+          <h2 id="pricing-title">Pricing (Public Beta)</h2>
+
+          <div class="pricing-grid">
+            <div class="price-card">
+              <h3>Identity Anchor</h3>
+              <p class="price">$9</p>
+              <p>Create a verifiable identity anchor for your agent.</p>
+            </div>
+
+            <div class="price-card">
+              <h3>Continuity Certificate</h3>
+              <p class="price">$3</p>
+              <p>Attest verifiable continuity commitments over time.</p>
+            </div>
+
+            <div class="price-card">
+              <h3>Lineage Certificate</h3>
+              <p class="price">$3</p>
+              <p>Declare derivation relationships across forks.</p>
+            </div>
+          </div>
+
+          <p class="note">
+            First Identity Anchor and first 10 Continuity Certificates are free during beta.
+            Anchoring cadence is application-defined.
+          </p>
+        </div>
+      </section>
+
+      <!-- PUBLIC KEY -->
+      <section id="public-key" class="section" aria-labelledby="pk-title">
+        <div class="container">
+          <h2 id="pk-title">Registry Public Key</h2>
+          <p>
+            Certificates can be verified offline using the Registry public key.
+          </p>
+
+          <div class="kv" aria-label="Registry key/value details">
+            <div class="kv-row">
+              <div class="kv-key">Registry ID</div>
+              <div class="kv-val mono" id="registry-id">loading…</div>
+            </div>
+            <div class="kv-row">
+              <div class="kv-key">Protocol Version</div>
+              <div class="kv-val mono" id="protocol-version">loading…</div>
+            </div>
+            <div class="kv-row">
+              <div class="kv-key">Public Key (base64)</div>
+              <div class="kv-val mono" id="public-key">loading…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRUST & SECURITY -->
       <section id="trust" class="section section-alt" aria-labelledby="trust-title">
         <div class="container">
           <h2 id="trust-title">Trust & Security</h2>
           <ul class="trust-list">
-            <li>All certificates are signed with the registry’s Ed25519 private key (trust root).</li>
-            <li>Verification uses canonical JSON and excludes <code>registry_signature_b64</code> from the signed payload.</li>
-            <li>Verification MUST NOT require registry availability—offline verification is required.</li>
-            <li>Certificates are immutable once issued (append-only record).</li>
-            <li>Identity Anchor certificates are required prior to Continuity or Lineage issuance for an <code>agent_id</code>.</li>
-            <li>Protocol behavior is pinned to <code>IAP-0.1</code> and certificate types are versioned.</li>
+            <li><strong>Offline verification:</strong> verify certificate signatures without contacting the Registry.</li>
+            <li><strong>Minimal surface:</strong> identity, continuity, lineage—no governance or behavioral scoring.</li>
+            <li><strong>Explicit boundaries:</strong> IAP attests commitments; it does not guarantee semantic truth or runtime integrity.</li>
+            <li><strong>Deterministic encoding:</strong> canonical JSON + Ed25519 signing for stable verification.</li>
           </ul>
-        </div>
-      </section>
-
-      <section id="spec" class="section" aria-labelledby="spec-title">
-        <div class="container">
-          <h2 id="spec-title">Protocol Specification</h2>
-          <p>
-            Canonical specification source (versioned, auditable history):
-            <a
-              href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/"
-              rel="noopener noreferrer"
-              >identity-anchor-protocol.github.io/iap-spec/spec/v0.1/</a
-            >
-          </p>
-          <p>
-            Version-pinned document:
-            <a
-              href="https://github.com/identity-anchor-protocol/iap-spec/blob/main/IAP-Protocol-Specification-v0.1.md"
-              rel="noopener noreferrer"
-              >IAP-Protocol-Specification-v0.1.md</a
-            >
-          </p>
         </div>
       </section>
     </main>
@@ -188,9 +237,7 @@
         <ul class="footer-links">
           <li><a href="https://github.com/dirkm2577" rel="noopener noreferrer">GitHub</a></li>
           <li>
-            <a href="https://github.com/identity-anchor-protocol/iap-spec" rel="noopener noreferrer"
-              >Spec Repo</a
-            >
+            <a href="https://github.com/identity-anchor-protocol/iap-spec" rel="noopener noreferrer">Spec Repo</a>
           </li>
           <li><a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></li>
         </ul>
@@ -236,6 +283,7 @@
         requestJSON(
           "/registry/public-key",
           function (data) {
+            if (!data) return;
             registryIdEl.textContent = data.registry_id || "unknown";
             protocolEl.textContent = data.protocol_version || "unknown";
             publicKeyEl.textContent = data.public_key_b64 || "unavailable";
