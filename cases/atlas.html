@@ -20,6 +20,7 @@
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
             <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
       </div>
@@ -31,41 +32,199 @@
           <p class="breadcrumbs"><a href="/#cases">← Back to Case Studies</a></p>
           <p class="eyebrow">Case Study</p>
           <h1>Atlas<span>Financial Continuity</span></h1>
-          <p class="hero-subhead">Atlas is an autonomous financial agent that accumulates credibility over time. The core problem is proving that the same cryptographic identity made specific commitments at specific times—even as behavior evolves.</p>
-          <p class="disclaimer">
-            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          <p class="hero-subhead">
+            Realistic promises. Strict verification boundaries. The goal is structural accountability: identity, declared lineage, and time-sequenced commitments.
           </p>
+
+          <div class="badge-row" aria-label="IAP primitives used">
+            <span class="badge"><strong>IAP-0.1</strong></span>
+            <span class="badge">Identity Anchor</span>
+            <span class="badge">Continuity</span>
+            <span class="badge">Lineage</span>
+          </div>
+
+          <p class="disclaimer">
+            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state).
+            It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          </p>
+
+          <div class="hero-actions" style="margin-top: 1.2rem;">
+            <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
+              Read the spec (v0.1)
+            </a>
+            <a class="btn btn-primary" href="/#quickstart">Quickstart</a>
+          </div>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container">
-          <h2>IAP Integration</h2>
-          <ul class="trust-list">
-            <li><strong>Identity Anchor:</strong> Derive <code>agent_id</code> from an Ed25519 key and obtain a Registry-signed Identity Anchor Certificate.</li>
-<li><strong>Continuity:</strong> Periodically commit a deterministic hash (e.g., ledger root) and obtain Continuity Certificates linking each new commitment to the previous one.</li>
-<li><strong>Lineage:</strong> If Atlas must create a new identity (e.g., key compromise / planned succession), declare derivation via a Lineage Certificate. The new identity starts its own continuity chain.</li>
-          </ul>
+          <h2>At a Glance</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3>What IAP Guarantees</h3>
+              <ul class="trust-list">
+                <li>Persistent cryptographic identity</li>
+<li>Time-sequenced continuity attestations</li>
+<li>Detectable anchoring gaps</li>
+<li>Verifiable lineage declarations</li>
+<li>Offline verification of certificates</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>What IAP Does Not Guarantee</h3>
+              <ul class="trust-list">
+                <li>Deterministic behavior</li>
+<li>Prevention of runtime compromise</li>
+<li>Internal semantic correctness of state</li>
+<li>Absence of reset unless detectable via committed hash</li>
+              </ul>
+            </div>
+          </div>
+
+          
+<div class="diagram">
+  <div class="callout"><strong>Core flow:</strong> Commit a deterministic ledger root at chosen checkpoints and prove continuity across time.</div>
+  <div class="flow" aria-label="IAP certificate flow">
+    <div class="flow-box">
+      <h3>Identity Anchor</h3>
+      <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Continuity</h3>
+      <p>Issue time-sequenced commitments (often hashes of internal state).</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Lineage</h3>
+      <p>Declare derivation across forks or identity succession.</p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
       <section class="section">
         <div class="container">
-          <h2>What IAP Guarantees</h2>
-          <ul class="trust-list">
-            <li>Persistent cryptographic identity for Atlas’ key-derived <code>agent_id</code>.</li>
-<li>Time-sequenced continuity attestations (with detectable anchoring gaps).</li>
-<li>Verifiable declared lineage relationships across derived identities.</li>
-<li>Offline verification of certificate signatures and chain links.</li>
-          </ul>
+          <h2>Full Case Study</h2>
+          <div class="card prose">
+            <h1>Atlas Case Study (Corrected)</h1>
 
-          <h2 style="margin-top: 1.6rem;">What IAP Does Not Guarantee</h2>
-          <ul class="trust-list">
-            <li>Deterministic behavior or identical outputs across runs.</li>
-<li>Prevention of runtime compromise or semantic correctness of internal state.</li>
-<li>Automatic determination of which fork/identity is “canonical.”</li>
-<li>Absence of resets unless encoded in the committed hash.</li>
-          </ul>
+<p>*Date: 2026-02-24*</p>
+
+<h2>Scenario</h2>
+
+<p>Atlas is an autonomous financial agent that executes trades, manages</p>
+<p>capital, and evolves its internal strategy over time.</p>
+
+<p>The key problem:</p>
+
+<p>&gt; How can external observers verify that the Atlas operating today is</p>
+<p>&gt; cryptographically continuous with the Atlas that operated yesterday?</p>
+
+<p>Atlas&#x27; behavior is not deterministic. Its outputs depend on market data,</p>
+<p>temperature settings, tool responses, and evolving internal state.</p>
+
+<p>Therefore, IAP does not attempt to verify behavior.</p>
+
+<p>IAP verifies **cryptographic identity and continuity of declared</p>
+<p>commitments**.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>IAP Integration</h2>
+
+<h3>Step 1 --- Identity Anchor</h3>
+
+<p>Atlas generates an Ed25519 key pair. Its public key deterministically</p>
+<p>derives its <code>agent_id</code>.</p>
+
+<p>The IAP Registry issues an **Identity Anchor Certificate**, attesting</p>
+<p>that:</p>
+
+<ul>
+<li>This public key existed at time T</li>
+<li>The Registry signed this attestation</li>
+<li>This was the origin identity of this chain</li>
+</ul>
+
+<p>This is a cryptographic birth certificate --- not a behavioral</p>
+<p>guarantee.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Step 2 --- Continuity Anchoring</h3>
+
+<p>Atlas maintains an internal ledger (e.g., AMCS). Periodically, it</p>
+<p>computes a deterministic hash of its ledger root (<code>memory_root</code>).</p>
+
+<p>It requests a **Continuity Certificate** from the Registry, which</p>
+<p>attests:</p>
+
+<ul>
+<li>The same public key signed the request</li>
+<li>The previous continuity certificate hash is referenced</li>
+<li>The declared `memory_root` hash was committed at time T</li>
+</ul>
+
+<p>Important:</p>
+
+<p>IAP does not interpret the meaning of the hash. It only attests that the</p>
+<p>identity declared this commitment at that time.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Step 3 --- Identity Succession (Key Compromise or Upgrade)</h3>
+
+<p>If Atlas must rotate keys:</p>
+
+<ul>
+<li>A new key pair generates a new identity</li>
+<li>A Lineage Certificate declares derivation from the previous identity</li>
+</ul>
+
+<p>The new identity starts its own continuity chain. Observers can verify</p>
+<p>declared lineage relationships.</p>
+
+<p>IAP does not decide which chain is canonical. Observers evaluate lineage</p>
+<p>and continuity themselves.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>What IAP Guarantees</h2>
+
+<ul>
+<li>Persistent cryptographic identity</li>
+<li>Time-sequenced continuity attestations</li>
+<li>Detectable anchoring gaps</li>
+<li>Verifiable lineage declarations</li>
+<li>Offline verification of certificates</li>
+</ul>
+
+<h2>What IAP Does Not Guarantee</h2>
+
+<ul>
+<li>Deterministic behavior</li>
+<li>Prevention of runtime compromise</li>
+<li>Internal semantic correctness of state</li>
+<li>Absence of reset unless detectable via committed hash</li>
+</ul>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>Result</h2>
+
+<p>Atlas becomes:</p>
+
+<ul>
+<li>Persistently identifiable</li>
+<li>Continuity-attested at chosen checkpoints</li>
+<li>Structurally fork-distinguishable via lineage</li>
+<li>Economically accountable at the identity level</li>
+</ul>
+          </div>
         </div>
       </section>
     </main>
