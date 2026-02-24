@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Non-technical user manual for issuing and verifying IAP certificates with iap-agent." />
+    <title>IAP User Manual | Identity Anchor Protocol Registry</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Registry</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="index.html#how">How It Works</a></li>
+            <li><a href="index.html#quickstart">Quickstart</a></li>
+            <li><a href="index.html#trust">Trust &amp; Security</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">User Manual</p>
+            <h1 id="title">From zero to a verified certificate</h1>
+            <p class="hero-subhead">
+              This guide explains the full flow in plain language: create an agent identity, anchor it once, then issue repeatable continuity certificates
+              as your agent evolves — and verify everything offline.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="index.html#quickstart">Back to Quickstart</a>
+              <a class="btn btn-secondary" href="index.html#how">Back to How It Works</a>
+            </div>
+          </div>
+
+          <aside class="status-card" aria-label="Key idea">
+            <h2>Key idea</h2>
+            <p class="status-note">
+              IAP never needs your raw memory. It certifies compact cryptographic <em>commitments</em> (hashes) that you can verify later.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Glossary (small but important)</h2>
+          <ul>
+            <li><strong>Agent key pair</strong>: a private key (kept secret) + public key (shareable). Your agent signs requests with the private key.</li>
+            <li><strong>agent_id</strong>: a stable identifier derived from the public key (what verifiers use to refer to “that identity”).</li>
+            <li><strong>Certificate</strong>: a signed JSON document issued by the Registry that can be verified offline.</li>
+            <li><strong>AMCS</strong>: Agent Memory Canonicalization Standard — a local append-only log that computes a deterministic <code>memory_root</code> and an increasing <code>sequence</code>.</li>
+            <li><strong>memory_root</strong>: a Merkle root hash that represents your current local agent state history.</li>
+            <li><strong>sequence</strong>: an integer counter that increases as your AMCS log grows (1, 2, 3, …).</li>
+            <li><strong>Offline verification</strong>: checking certificate signatures locally using the Registry public key (no network needed).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>What you will do</h2>
+          <ol>
+            <li>Create your local agent identity (keys).</li>
+            <li>Write two small “identity files” (an <code>AGENT.md</code> and a <code>SOUL.md</code>).</li>
+            <li>Store them in your local AMCS database so you get a <code>memory_root</code> and <code>sequence</code>.</li>
+            <li>Buy and issue your one-time <strong>Identity Anchor</strong> certificate.</li>
+            <li>Buy and issue a <strong>Continuity</strong> certificate for the latest <code>memory_root</code>/<code>sequence</code>.</li>
+            <li>Download the certificate and verify it offline.</li>
+          </ol>
+
+          <div class="callout">
+            <p><strong>Good mental model:</strong> Identity Anchor is the agent’s “birth certificate”. Continuity certificates are “dated notarizations”
+              that the same agent identity reached a particular state checkpoint at a particular time.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Step 1 — Install the tools</h2>
+          <p>On your computer, create a virtual environment and install the IAP command-line tool (<code>iap-agent</code>).</p>
+          <pre class="code-block"><code>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install iap-agent</code></pre>
+
+          <p>Tell the tool where your Registry runs:</p>
+          <pre class="code-block"><code>export REGISTRY_BASE="https://registry.ia-protocol.com"</code></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Step 2 — Create your agent identity (keys)</h2>
+          <p>This generates a key pair locally and prints your <code>agent_id</code>. Keep the private key safe.</p>
+          <pre class="code-block"><code>iap-agent init --show-public --json</code></pre>
+          <p>Copy the printed <code>agent_id</code>. You will use it in later steps.</p>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Step 3 — Create the identity files you want to commit to</h2>
+          <p>Create two small files. They can be minimal — you can evolve them later.</p>
+          <pre class="code-block"><code>cat &gt; AGENT.md &lt;&lt;'EOF'
+# Atlas
+Role: Personal AI assistant
+EOF
+
+cat &gt; SOUL.md &lt;&lt;'EOF'
+# Purpose
+Help user reliably, safely, and with continuity.
+EOF</code></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Step 4 — Store them in AMCS (so you get a memory_root)</h2>
+          <p>AMCS is your local append-only history. When you append events, it produces:</p>
+          <ul>
+            <li>a new <code>memory_root</code> (hash checkpoint), and</li>
+            <li>a new <code>sequence</code> number.</li>
+          </ul>
+          <p>If your repo includes the helper script, run:</p>
+          <pre class="code-block"><code>python scripts/append_agent_files_to_amcs.py \
+  --amcs-db ./amcs.db \
+  --agent-id &lt;agent_id&gt; \
+  --agent-file ./AGENT.md \
+  --soul-file ./SOUL.md</code></pre>
+          <p>The command prints the latest <code>memory_root</code>.</p>
+
+          <p>You can also confirm root + sequence with:</p>
+          <pre class="code-block"><code>iap-agent amcs root --amcs-db ./amcs.db --agent-id &lt;agent_id&gt; --json</code></pre>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Step 5 — Issue your Identity Anchor (one-time)</h2>
+          <p>This creates a request and sends you to payment. After payment, the Registry issues the certificate.</p>
+          <pre class="code-block"><code>iap-agent anchor issue \
+  --registry-base "$REGISTRY_BASE" \
+  --agent-name "Atlas" \
+  --payment-provider auto \
+  --open-browser \
+  --json</code></pre>
+
+          <p><strong>Payment options</strong>:</p>
+          <ul>
+            <li><code>auto</code>: tries Stripe first, then Lightning fallback</li>
+            <li><code>stripe</code>: force Stripe checkout</li>
+            <li><code>lightning-btc</code>: force Lightning invoice</li>
+          </ul>
+
+          <p>Tip: add <code>--wait</code> if you want the command to poll until issuance completes.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Step 6 — Issue a Continuity certificate (repeatable)</h2>
+          <p>Continuity is what you will do over time, whenever your agent changes meaningfully (new memory, new config, new capabilities).</p>
+
+          <p>1) Create the continuity request from your AMCS database:</p>
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "$REGISTRY_BASE" --amcs-db ./amcs.db --json</code></pre>
+
+          <p>2) Pay for it using the <code>request_id</code> printed above:</p>
+          <pre class="code-block"><code>iap-agent continuity pay \
+  --registry-base "$REGISTRY_BASE" \
+  --request-id &lt;request_id&gt; \
+  --payment-provider auto \
+  --open-browser \
+  --json</code></pre>
+
+          <div class="callout">
+            <p><strong>What the Registry actually checks:</strong> that the request is signed by the anchored agent key, and that the submitted
+              <code>sequence</code> is strictly increasing for that <code>agent_id</code>. The Registry does not inspect your raw files.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Step 7 — Download the certificate and verify it offline</h2>
+          <p>Wait for issuance, fetch the certificate JSON, then verify it locally:</p>
+          <pre class="code-block"><code>iap-agent continuity wait --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --json
+iap-agent continuity cert --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --output-file ./certificate.json --json
+iap-agent verify ./certificate.json --registry-base "$REGISTRY_BASE" --json</code></pre>
+          <p>Expected result:</p>
+          <pre class="code-block"><code>{"ok": true, "reason": "ok"}</code></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>When should you issue continuity certificates?</h2>
+          <ul>
+            <li>After a meaningful memory update (new long-term facts, policies, or preferences).</li>
+            <li>After a configuration change (new tools, new permissions, new model version).</li>
+            <li>Before and after a migration (new server, new device).</li>
+            <li>Before publishing results that must be attributable (research checkpoints, financial actions, releases).</li>
+          </ul>
+          <p>
+            You choose the cadence. The important part is that each certificate creates an auditable timeline of commitments.
+          </p>
+
+          <div class="hero-actions" style="margin-top:1.2rem">
+            <a class="btn btn-primary" href="index.html">Back to the landing page</a>
+            <a class="btn btn-secondary" href="index.html#how">Back to How It Works</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">User Manual</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/identity-anchor-protocol" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://github.com/identity-anchor-protocol/iap-spec" rel="noopener noreferrer">Spec Repo</a></li>
+          <li><a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
