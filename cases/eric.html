@@ -20,6 +20,7 @@
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
             <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
       </div>
@@ -31,39 +32,170 @@
           <p class="breadcrumbs"><a href="/#cases">← Back to Case Studies</a></p>
           <p class="eyebrow">Case Study</p>
           <h1>Eric<span>Research Provenance</span></h1>
-          <p class="hero-subhead">Eric is a long-running research agent. The goal is to provide verifiable provenance for checkpoint artifacts (datasets, outputs, model artifacts) over long horizons via signed, time-stamped commitments.</p>
-          <p class="disclaimer">
-            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          <p class="hero-subhead">
+            Realistic promises. Strict verification boundaries. The goal is structural accountability: identity, declared lineage, and time-sequenced commitments.
           </p>
+
+          <div class="badge-row" aria-label="IAP primitives used">
+            <span class="badge"><strong>IAP-0.1</strong></span>
+            <span class="badge">Identity Anchor</span>
+            <span class="badge">Continuity</span>
+            <span class="badge">Lineage</span>
+          </div>
+
+          <p class="disclaimer">
+            IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state).
+            It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+          </p>
+
+          <div class="hero-actions" style="margin-top: 1.2rem;">
+            <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
+              Read the spec (v0.1)
+            </a>
+            <a class="btn btn-primary" href="/#quickstart">Quickstart</a>
+          </div>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container">
-          <h2>IAP Integration</h2>
-          <ul class="trust-list">
-            <li><strong>Identity Anchor:</strong> Establish a stable cryptographic identity for Eric with an Identity Anchor Certificate.</li>
-<li><strong>Continuity:</strong> At milestones, commit deterministic hashes of research artifacts and obtain Continuity Certificates linking each checkpoint to the prior one.</li>
-<li><strong>Lineage:</strong> If Eric is forked, a legitimate fork can declare lineage. Undeclared forks lack a verifiable lineage link.</li>
-          </ul>
+          <h2>At a Glance</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3>What IAP Guarantees</h3>
+              <ul class="trust-list">
+                <li>Provenance of checkpoint commitments</li>
+<li>Time-sequenced attestation</li>
+<li>Structural fork distinguishability</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>What IAP Does Not Guarantee</h3>
+              <ul class="trust-list">
+                <li>Reproducibility by itself</li>
+<li>Scientific correctness</li>
+<li>Behavioral sameness across runs</li>
+              </ul>
+            </div>
+          </div>
+
+          
+<div class="diagram">
+  <div class="callout"><strong>Core flow:</strong> Anchor milestone hashes so provenance is verifiable even years later, including across forks.</div>
+  <div class="flow" aria-label="IAP certificate flow">
+    <div class="flow-box">
+      <h3>Identity Anchor</h3>
+      <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Continuity</h3>
+      <p>Issue time-sequenced commitments (often hashes of internal state).</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <h3>Lineage</h3>
+      <p>Declare derivation across forks or identity succession.</p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
       <section class="section">
         <div class="container">
-          <h2>What IAP Guarantees</h2>
-          <ul class="trust-list">
-            <li>Time-stamped provenance for checkpoint commitments by a consistent identity.</li>
-<li>Tamper-evident continuity of declared checkpoint hashes.</li>
-<li>Structural distinguishability of derived forks when lineage is declared.</li>
-          </ul>
+          <h2>Full Case Study</h2>
+          <div class="card prose">
+            <h1>Eric Case Study (Corrected)</h1>
 
-          <h2 style="margin-top: 1.6rem;">What IAP Does Not Guarantee</h2>
-          <ul class="trust-list">
-            <li>Scientific correctness, completeness, or reproducibility by itself.</li>
-<li>Behavioral sameness or identical outputs across runs.</li>
-<li>Forcing a fork to declare lineage (malicious forks can refuse).</li>
-          </ul>
+<p>*Date: 2026-02-24*</p>
+
+<h2>Scenario</h2>
+
+<p>Eric is a long-running research agent accumulating results over years.</p>
+
+<p>The challenge:</p>
+
+<p>&gt; How can funding bodies verify that research checkpoints were attested</p>
+<p>&gt; by the same cryptographic identity over time?</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>IAP Integration</h2>
+
+<h3>Identity Anchor</h3>
+
+<p>Eric derives a deterministic agent_id from its key. The Registry issues</p>
+<p>an Identity Anchor Certificate.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Research Checkpoint Anchoring</h3>
+
+<p>At major milestones, Eric computes deterministic hashes of:</p>
+
+<ul>
+<li>Research datasets</li>
+<li>Model artifacts</li>
+<li>Experimental outputs</li>
+</ul>
+
+<p>Eric anchors these hashes via Continuity Certificates.</p>
+
+<p>The Registry attests:</p>
+
+<ul>
+<li>The identity made this commitment</li>
+<li>At time T</li>
+<li>Linked to the prior continuity certificate</li>
+</ul>
+
+<p>IAP attests the hash --- not the semantic validity of research.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h3>Fork Scenario</h3>
+
+<p>If a fork of Eric is created:</p>
+
+<ul>
+<li>A legitimate fork may declare lineage</li>
+<li>An undeclared fork will lack a verifiable lineage chain</li>
+</ul>
+
+<p>Observers evaluate lineage relationships independently.</p>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>What IAP Guarantees</h2>
+
+<ul>
+<li>Provenance of checkpoint commitments</li>
+<li>Time-sequenced attestation</li>
+<li>Structural fork distinguishability</li>
+</ul>
+
+<h2>What IAP Does Not Guarantee</h2>
+
+<ul>
+<li>Reproducibility by itself</li>
+<li>Scientific correctness</li>
+<li>Behavioral sameness across runs</li>
+</ul>
+
+<p>------------------------------------------------------------------------</p>
+
+<h2>Result</h2>
+
+<p>Eric&#x27;s research gains:</p>
+
+<ul>
+<li>Verifiable provenance</li>
+<li>Tamper-evident checkpoint history</li>
+<li>Clear derivation relationships across forks</li>
+</ul>
+          </div>
         </div>
       </section>
     </main>
