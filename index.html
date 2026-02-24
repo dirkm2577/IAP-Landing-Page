@@ -9,7 +9,7 @@
     />
     <title>IAP Registry | Identity Anchor Protocol</title>
     <meta name="registry-origin" content="https://registry.ia-protocol.com" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.bluecode.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -310,5 +310,61 @@ iap-agent verify certificate.json</code></pre>
         );
       })();
     </script>
+  
+<script>
+(function () {
+  function addCopyButtons() {
+    const blocks = document.querySelectorAll('pre');
+    blocks.forEach((pre) => {
+      const codeEl = pre.querySelector('code');
+      if (!codeEl && !pre.classList.contains('code-block')) return;
+      if (pre.querySelector(':scope > .code-toolbar')) return;
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'code-toolbar';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+
+      btn.addEventListener('click', async () => {
+        const text = (codeEl ? codeEl.innerText : pre.innerText).replace(/\n$/, '');
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          try { document.execCommand('copy'); } catch (_) {}
+          document.body.removeChild(ta);
+        }
+
+        const existing = toolbar.querySelector('.copy-badge');
+        if (existing) existing.remove();
+        const badge = document.createElement('span');
+        badge.className = 'copy-badge';
+        badge.textContent = 'Copied';
+        toolbar.appendChild(badge);
+        setTimeout(() => badge.remove(), 1400);
+      });
+
+      toolbar.appendChild(btn);
+      pre.insertBefore(toolbar, pre.firstChild);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addCopyButtons);
+  } else {
+    addCopyButtons();
+  }
+})();
+</script>
+
   </body>
 </html>
