@@ -355,4 +355,183 @@ h2 {
   .nav-list {
     flex-wrap: wrap;
   }
+
+  .tiles {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  .tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(12, 24, 36, 0.12);
+  }
+  
+  .tile-sub {
+    font-size: 0.9rem;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pricing-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .price-card {
+    background: var(--surface);
+    border: 2px solid var(--primary);
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  
+  .price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0.5rem 0;
+  }
+  
+  @media (min-width: 900px) {
+    .tiles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .pricing-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+
+/* --- Layout fixes (added) --- */
+.tiles {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tile {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.2rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tile:hover,
+.tile:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(12, 24, 36, 0.12);
+  border-color: rgba(20, 52, 95, 0.35);
+}
+
+.tile-sub {
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 800;
+  margin: 0.25rem 0 0.6rem;
+}
+
+.pricing-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.price-card {
+  background: var(--surface);
+  border: 2px solid rgba(20, 52, 95, 0.25);
+  border-radius: 14px;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 0.5rem 0;
+}
+
+.note {
+  color: var(--text-soft);
+  margin-top: 1rem;
+}
+
+.kv {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.kv-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.kv-key {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.kv-val {
+  word-break: break-all;
+}
+
+.disclaimer {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  border-left: 3px solid rgba(20, 52, 95, 0.35);
+  padding-left: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+.case-hero {
+  padding: 3.2rem 0 2rem;
+}
+
+.breadcrumbs a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  text-decoration: underline;
+}
+
+@media (min-width: 900px) {
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
