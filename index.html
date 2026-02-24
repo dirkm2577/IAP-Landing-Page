@@ -208,7 +208,7 @@ iap-agent verify certificate.json</code></pre>
             </div>
             <div class="kv-row">
               <div class="kv-key">Public Key (base64)</div>
-              <div class="kv-val mono" id="public-key">loading…</div>
+              <div class="kv-val mono" id="public-key-b64">loading…</div>
             </div>
           </div>
         </div>
@@ -249,7 +249,7 @@ iap-agent verify certificate.json</code></pre>
         var statusEl = document.getElementById("status-badge");
         var registryIdEl = document.getElementById("registry-id");
         var protocolEl = document.getElementById("protocol-version");
-        var publicKeyEl = document.getElementById("public-key");
+        var publicKeyEl = document.getElementById("public-key-b64");
         var registryOriginMeta = document.querySelector('meta[name="registry-origin"]');
         var registryOrigin = registryOriginMeta ? registryOriginMeta.content : "";
 
