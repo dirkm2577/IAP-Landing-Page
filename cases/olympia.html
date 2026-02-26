@@ -21,7 +21,7 @@
             <li><a href="/#how">How It Works</a></li>
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
-            <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#registry-public-key">Public Key</a></li>
             <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
@@ -84,7 +84,7 @@
           
 <div class="diagram">
   <div class="callout"><strong>Core flow:</strong> Anchor coordination checkpoints so upgrades and derived instances remain structurally auditable.</div>
-  <div class="flow" aria-label="IAP certificate flow">
+  <div class="flow" aria-label="IAP state continuity flow">
     <div class="flow-box">
       <h3>Identity Anchor</h3>
       <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
@@ -131,7 +131,7 @@
 <h3>Identity Anchor</h3>
 
 <p>Olympia derives a deterministic agent_id from its public key. The</p>
-<p>Registry issues an Identity Anchor Certificate.</p>
+<p>Registry issues an Identity Anchor record.</p>
 
 <p>------------------------------------------------------------------------</p>
 
@@ -139,7 +139,7 @@
 
 <p>Olympia records coordination events internally. It computes a</p>
 <p>deterministic root hash of recorded events and anchors it via Continuity</p>
-<p>Certificates.</p>
+<p>records.</p>
 
 <p>This provides tamper-evidence for what Olympia declares --- assuming its</p>
 <p>internal ledger integrity assumptions hold.</p>
@@ -152,7 +152,7 @@
 
 <ul>
 <li>A new identity is created</li>
-<li>A Lineage Certificate links it to the prior identity</li>
+<li>A Lineage record links it to the prior identity</li>
 </ul>
 
 <p>The new identity starts its own continuity chain. Observers verify</p>
