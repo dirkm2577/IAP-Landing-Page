@@ -21,7 +21,7 @@
             <li><a href="/#how">How It Works</a></li>
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
-            <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#registry-public-key">Public Key</a></li>
             <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
@@ -70,7 +70,7 @@
 <li>Time-sequenced continuity attestations</li>
 <li>Detectable anchoring gaps</li>
 <li>Verifiable lineage declarations</li>
-<li>Offline verification of certificates</li>
+<li>Offline verification of signed records</li>
               </ul>
             </div>
             <div class="card">
@@ -87,7 +87,7 @@
           
 <div class="diagram">
   <div class="callout"><strong>Core flow:</strong> Commit a deterministic ledger root at chosen checkpoints and prove continuity across time.</div>
-  <div class="flow" aria-label="IAP certificate flow">
+  <div class="flow" aria-label="IAP state continuity flow">
     <div class="flow-box">
       <h3>Identity Anchor</h3>
       <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
@@ -141,7 +141,7 @@
 <p>Atlas generates an Ed25519 key pair. Its public key deterministically</p>
 <p>derives its <code>agent_id</code>.</p>
 
-<p>The IAP Registry issues an **Identity Anchor Certificate**, attesting</p>
+<p>The IAP Registry issues an **Identity Anchor record**, attesting</p>
 <p>that:</p>
 
 <ul>
@@ -150,7 +150,7 @@
 <li>This was the origin identity of this chain</li>
 </ul>
 
-<p>This is a cryptographic birth certificate --- not a behavioral</p>
+<p>This is a cryptographic birth record --- not a behavioral</p>
 <p>guarantee.</p>
 
 <p>------------------------------------------------------------------------</p>
@@ -160,12 +160,12 @@
 <p>Atlas maintains an internal ledger (e.g., AMCS). Periodically, it</p>
 <p>computes a deterministic hash of its ledger root (<code>memory_root</code>).</p>
 
-<p>It requests a **Continuity Certificate** from the Registry, which</p>
+<p>It requests a **Continuity record** from the Registry, which</p>
 <p>attests:</p>
 
 <ul>
 <li>The same public key signed the request</li>
-<li>The previous continuity certificate hash is referenced</li>
+<li>The previous continuity record hash is referenced</li>
 <li>The declared `memory_root` hash was committed at time T</li>
 </ul>
 
@@ -200,7 +200,7 @@
 <li>Time-sequenced continuity attestations</li>
 <li>Detectable anchoring gaps</li>
 <li>Verifiable lineage declarations</li>
-<li>Offline verification of certificates</li>
+<li>Offline verification of signed records</li>
 </ul>
 
 <h2>What IAP Does Not Guarantee</h2>

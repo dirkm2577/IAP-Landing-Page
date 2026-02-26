@@ -21,7 +21,7 @@
             <li><a href="/#how">How It Works</a></li>
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
-            <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#registry-public-key">Public Key</a></li>
             <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
@@ -84,7 +84,7 @@
           
 <div class="diagram">
   <div class="callout"><strong>Core flow:</strong> Anchor milestone hashes so provenance is verifiable even years later, including across forks.</div>
-  <div class="flow" aria-label="IAP certificate flow">
+  <div class="flow" aria-label="IAP state continuity flow">
     <div class="flow-box">
       <h3>Identity Anchor</h3>
       <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
@@ -127,7 +127,7 @@
 <h3>Identity Anchor</h3>
 
 <p>Eric derives a deterministic agent_id from its key. The Registry issues</p>
-<p>an Identity Anchor Certificate.</p>
+<p>an Identity Anchor record.</p>
 
 <p>------------------------------------------------------------------------</p>
 
@@ -141,14 +141,14 @@
 <li>Experimental outputs</li>
 </ul>
 
-<p>Eric anchors these hashes via Continuity Certificates.</p>
+<p>Eric anchors these hashes via Continuity records.</p>
 
 <p>The Registry attests:</p>
 
 <ul>
 <li>The identity made this commitment</li>
 <li>At time T</li>
-<li>Linked to the prior continuity certificate</li>
+<li>Linked to the prior continuity record</li>
 </ul>
 
 <p>IAP attests the hash --- not the semantic validity of research.</p>

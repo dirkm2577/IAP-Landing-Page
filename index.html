@@ -7,7 +7,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       name="description"
-      content="Identity Anchor Protocol (IAP) Registry: a Certificate Authority issuing Identity Anchor, Continuity, and Lineage certificates for autonomous agents—cryptographically verifiable offline."
+      content="Identity Anchor Protocol (IAP): tamper-evident state evolution tracking for autonomous agents with offline verification."
     />
     <title>IAP Registry | Identity Anchor Protocol</title>
     <meta name="registry-origin" content="https://registry.ia-protocol.com" />
@@ -37,24 +37,25 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">Agent Web Infrastructure</p>
+            <p class="eyebrow">State Evolution Infrastructure</p>
             <h1 id="hero-title">
-              Identity & Continuity
-              <span>for Persistent Autonomous Agents</span>
+              Version-control your
+              <span>autonomous agent state</span>
             </h1>
             <p class="hero-subhead">
-              Prove that the same cryptographic agent identity made specific commitments at specific times — across restarts, upgrades, migrations, and forks.
+              Track tamper-evident state evolution across restarts, upgrades, migrations, and forks.
             </p>
             <p class="hero-subhead">
-              Whenever an autonomous agent accumulates value over time, continuity becomes essential.
+              Detect silent memory drift and verify continuity with signed checkpoints.
             </p>
 
             <p class="disclaimer">
-              IAP verifies <strong>identity</strong>, <strong>declared lineage</strong>, and a <strong>time-sequenced chain of signed commitments</strong> (often hashes of internal state). It does <em>not</em> verify behavior, semantic correctness, or prevent runtime compromise.
+              IAP tracks <strong>state changes</strong>, not model randomness. It does <em>not</em> make LLM output deterministic.
             </p>
 
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#quickstart">Get Started in 10 Minutes</a>
+              <a class="btn btn-primary" href="#quickstart">Get the SDK</a>
+              <a class="btn btn-secondary" href="#quickstart">Start Tracking Agent State</a>
               <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
                 Protocol Spec (v0.1)
               </a>
@@ -65,7 +66,7 @@
             <h2>Registry Status</h2>
             <p id="status-badge" class="status status-ok">Operational</p>
             <p class="status-note">
-              Public key and certificates verifiable offline.
+              Public key and signed records verifiable offline.
             </p>
           </aside>
         </div>
@@ -93,31 +94,31 @@
       <!-- HOW IT WORKS -->
       <section id="how" class="section">
         <div class="container">
-          <h2>Minimal Universal Primitive</h2>
-          <div class="flow" aria-label="IAP certificate flow">
+          <h2>Install → Init → Track → Anchor → Commit → Verify</h2>
+          <div class="flow" aria-label="IAP state continuity flow">
             <div class="flow-box">
-              <h3>Identity Anchor Certificate</h3>
-              <p>Bind an agent’s <strong>public key</strong> to a stable <strong>agent_id</strong> with a Registry-signed certificate. This is the “birth certificate” for an agent identity: one anchor per key, verifiable offline, used as the trust root for all future continuity proofs.</p>
+              <h3>Track</h3>
+              <p>Canonicalize key files and append state events into AMCS to produce deterministic checkpoints.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Continuity Certificate</h3>
-              <p>Prove that the <em>same</em> anchored agent made specific, ordered commitments over time. Each certificate attests a <strong>memory_root</strong> and <strong>sequence</strong> (from AMCS) signed by the agent key, then countersigned by the Registry with a timestamp. Verifiers check signature validity and monotonic sequence.</p>
+              <h3>Anchor</h3>
+              <p>Sign state roots locally, and optionally anchor them in the public registry for external verification.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
-              <h3>Lineage Certificate</h3>
-              <p>Declare how an identity evolves across upgrades, migrations, or forks. A Lineage certificate links a <strong>child</strong> identity to a <strong>parent</strong> (or predecessor) and records the declared relationship (e.g., fork, successor, migration). This makes “this new agent came from that one” auditable and portable.</p>
+              <h3>Verify</h3>
+              <p>Validate continuity chains and detect drift or forks with offline signature checks and sequence checks.</p>
             </div>
           </div>
 
           <div class="callout prose" role="note" aria-label="How it works notes">
-            <p><strong>AMCS</strong> (Agent Memory Canonicalization Standard) is a local, append-only log format that produces a deterministic
-              <code>memory_root</code> (Merkle root) and an increasing <code>sequence</code>. IAP does not read your raw memory—only these compact commitments.
-            </p>
-            <p>
-              Want the step-by-step flow without jargon? Use the user manual below.
-            </p>
+              <p><strong>AMCS</strong> is a local, append-only state log that produces deterministic
+                <code>memory_root</code> checkpoints and increasing <code>sequence</code>. IAP only anchors compact commitments.
+              </p>
+              <p>
+                Want the step-by-step flow without jargon? Use the user manual below.
+              </p>
             <div class="hero-actions" style="margin-top:0.6rem">
               <a class="btn btn-secondary" href="iap-user-manual.html">Open the user manual</a>
             </div>
@@ -163,44 +164,18 @@
       <section id="quickstart" class="section">
         <div class="container">
           <h2>Quickstart</h2>
-          <p>Issue your first continuity certificate in under 10 minutes.</p>
+          <p>Start tracking state evolution in minutes.</p>
           <pre class="code-block"><code>pip install iap-agent
-iap-agent init
-iap-agent anchor issue
-iap-agent flow run
-iap-agent verify certificate.json</code></pre>
-        </div>
-      </section>
-
-      <!-- PRICING -->
-      <section class="section section-alt" aria-labelledby="pricing-title">
-        <div class="container">
-          <h2 id="pricing-title">Pricing (Public Beta)</h2>
-
-          <div class="pricing-grid">
-            <div class="price-card">
-              <h3>Identity Anchor</h3>
-              <p class="price">$8</p>
-              <p>Create a verifiable identity anchor for your agent.</p>
-            </div>
-
-            <div class="price-card">
-              <h3>Continuity Certificate</h3>
-              <p class="price">$2</p>
-              <p>Attest verifiable continuity commitments over time.</p>
-            </div>
-
-            <div class="price-card">
-              <h3>Lineage Certificate</h3>
-              <p class="price">$4</p>
-              <p>Declare derivation relationships across forks.</p>
-            </div>
+iap init
+iap track
+iap anchor --local-only
+iap commit "updated objective"
+iap verify ./continuity_record.json --registry-public-key-b64 &lt;key&gt;</code></pre>
+          <div class="hero-actions" style="margin-top:0.8rem">
+            <a class="btn btn-primary" href="https://github.com/identity-anchor-protocol/iap_sdk" target="_blank" rel="noopener noreferrer">Get the SDK</a>
+            <a class="btn btn-secondary" href="docs/run-drift-demo.html">Run the 5-minute drift demo</a>
+            <a class="btn btn-secondary" href="docs/model-randomness-vs-state-mutation.html">Read technical docs</a>
           </div>
-
-          <p class="note">
-            First Identity Anchor and first 10 Continuity Certificates are free during beta.
-            Anchoring cadence is application-defined.
-          </p>
         </div>
       </section>
 
@@ -209,7 +184,7 @@ iap-agent verify certificate.json</code></pre>
         <div class="container">
           <h2 id="pk-title">Registry Public Key</h2>
           <p>
-            Certificates can be verified offline using the Registry public key.
+            Anchor and continuity records can be verified offline using the Registry public key.
           </p>
 
           <div class="kv" aria-label="Registry key/value details">
@@ -234,10 +209,18 @@ iap-agent verify certificate.json</code></pre>
         <div class="container">
           <h2 id="trust-title">Trust & Security</h2>
           <ul class="trust-list">
-            <li><strong>Offline verification:</strong> verify certificate signatures without contacting the Registry.</li>
+            <li><strong>Offline verification:</strong> verify signatures without contacting the Registry.</li>
             <li><strong>Minimal surface:</strong> identity, continuity, lineage—no governance or behavioral scoring.</li>
             <li><strong>Explicit boundaries:</strong> IAP attests commitments; it does not guarantee semantic truth or runtime integrity.</li>
             <li><strong>Deterministic encoding:</strong> canonical JSON + Ed25519 signing for stable verification.</li>
+          </ul>
+          <p style="margin-top:1rem;">Transition docs:</p>
+          <ul class="trust-list">
+            <li><a href="docs/model-randomness-vs-state-mutation.html">Model randomness vs state mutation</a></li>
+            <li><a href="docs/memory-compaction-and-drift.html">Why memory compaction causes drift</a></li>
+            <li><a href="docs/what-iap-tracks.html">What IAP tracks</a></li>
+            <li><a href="docs/what-iap-does-not-track.html">What IAP does not track</a></li>
+            <li><a href="docs/example-debugging-scenario.html">Example debugging scenario</a></li>
           </ul>
         </div>
       </section>

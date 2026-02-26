@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://registry.ia-protocol.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'self'; frame-ancestors 'none'; object-src 'none';" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="description" content="Non-technical user manual for issuing and verifying IAP certificates with iap-agent." />
+    <meta name="description" content="Non-technical user manual for issuing and verifying IAP continuity records with iap-agent." />
     <title>IAP User Manual | Identity Anchor Protocol Registry</title>
     <link rel="stylesheet" href="styles.bluecode.css" />
   </head>
@@ -30,9 +30,9 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <p class="eyebrow">User Manual</p>
-            <h1 id="title">From zero to a verified certificate</h1>
+            <h1 id="title">From zero to a verified continuity record</h1>
             <p class="hero-subhead">
-              This guide explains the full flow in plain language: create an agent identity, anchor it once, then issue repeatable continuity certificates
+              This guide explains the full flow in plain language: create an agent identity, anchor it once, then issue repeatable continuity records
               as your agent evolves — and verify everything offline.
             </p>
             <div class="hero-actions">
@@ -56,11 +56,11 @@
           <ul>
             <li><strong>Agent key pair</strong>: a private key (kept secret) + public key (shareable). Your agent signs requests with the private key.</li>
             <li><strong>agent_id</strong>: a stable identifier derived from the public key (what verifiers use to refer to “that identity”).</li>
-            <li><strong>Certificate</strong>: a signed JSON document issued by the Registry that can be verified offline.</li>
+            <li><strong>Continuity record</strong>: a signed JSON document issued by the Registry that can be verified offline.</li>
             <li><strong>AMCS</strong>: Agent Memory Canonicalization Standard — a local append-only log that computes a deterministic <code>memory_root</code> and an increasing <code>sequence</code>.</li>
             <li><strong>memory_root</strong>: a Merkle root hash that represents your current local agent state history.</li>
             <li><strong>sequence</strong>: an integer counter that increases as your AMCS log grows (1, 2, 3, …).</li>
-            <li><strong>Offline verification</strong>: checking certificate signatures locally using the Registry public key (no network needed).</li>
+            <li><strong>Offline verification</strong>: checking record signatures locally using the Registry public key (no network needed).</li>
           </ul>
         </div>
       </section>
@@ -73,14 +73,14 @@
             <li>Take all your agent files (Agent/Soul/Skills etc.) OR</li>
             <li>Write two small “identity files” (an <code>AGENT.md</code> and a <code>SOUL.md</code>).</li>
             <li>Store them in your local AMCS database so you get a <code>memory_root</code> and <code>sequence</code>.</li>
-            <li>Buy and issue your one-time <strong>Identity Anchor</strong> certificate.</li>
-            <li>Buy and issue a <strong>Continuity</strong> certificate for the latest <code>memory_root</code>/<code>sequence</code>.</li>
-            <li>Download the certificate and verify it locally (if you already saved the Registry public key the signature verification math is done locally.
+            <li>Buy and issue your one-time <strong>Identity Anchor</strong> record.</li>
+            <li>Buy and issue a <strong>Continuity</strong> record for the latest <code>memory_root</code>/<code>sequence</code>.</li>
+            <li>Download the record and verify it locally (if you already saved the Registry public key the signature verification math is done locally.
               No API call is required during the cryptographic check itself).</li>
           </ol>
 
           <div class="callout">
-            <p><strong>Good mental model:</strong> Identity Anchor is the agent’s “birth certificate”. Continuity certificates are “dated notarizations”
+            <p><strong>Good mental model:</strong> Identity Anchor is the agent’s “birth record”. Continuity records are “dated notarizations”
               that the same agent identity reached a particular state checkpoint at a particular time.</p>
           </div>
         </div>
@@ -149,7 +149,7 @@ EOF</code></pre>
       <section class="section section-alt">
         <div class="container prose">
           <h2>Step 5 — Issue your Identity Anchor (one-time)</h2>
-          <p>This creates a request and sends you to payment. After payment, the Registry issues the certificate.</p>
+          <p>This creates a request and sends you to payment. After payment, the Registry issues the anchor record.</p>
           <pre class="code-block"><code>iap-agent anchor issue \
   --registry-base "$REGISTRY_BASE" \
   --agent-name "Atlas" \
@@ -170,7 +170,7 @@ EOF</code></pre>
 
       <section class="section">
         <div class="container prose">
-          <h2>Step 6 — Issue a Continuity certificate (repeatable)</h2>
+          <h2>Step 6 — Issue a Continuity record (repeatable)</h2>
           <p>Continuity is what you will do over time, whenever your agent changes meaningfully (new memory, new config, new capabilities).</p>
 
           <p>1) Create the continuity request from your AMCS database:</p>
@@ -193,11 +193,11 @@ EOF</code></pre>
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Step 7 — Download the certificate and verify it offline</h2>
-          <p>Wait for issuance, fetch the certificate JSON, then verify it locally:</p>
+          <h2>Step 7 — Download the continuity record and verify it offline</h2>
+          <p>Wait for issuance, fetch the continuity record JSON, then verify it locally:</p>
           <pre class="code-block"><code>iap-agent continuity wait --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --json
-iap-agent continuity cert --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --output-file ./certificate.json --json
-iap-agent verify ./certificate.json --registry-base "$REGISTRY_BASE" --json</code></pre>
+iap-agent continuity cert --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json
+iap-agent verify ./continuity_record.json --registry-base "$REGISTRY_BASE" --json</code></pre>
           <p>Expected result:</p>
           <pre class="code-block"><code>{"ok": true, "reason": "ok"}</code></pre>
         </div>
@@ -205,7 +205,7 @@ iap-agent verify ./certificate.json --registry-base "$REGISTRY_BASE" --json</cod
 
       <section class="section">
         <div class="container prose">
-          <h2>When should you issue continuity certificates?</h2>
+          <h2>When should you issue continuity records?</h2>
           <ul>
             <li>After a meaningful memory update (new long-term facts, policies, or preferences).</li>
             <li>After a configuration change (new tools, new permissions, new model version).</li>
@@ -213,7 +213,7 @@ iap-agent verify ./certificate.json --registry-base "$REGISTRY_BASE" --json</cod
             <li>Before publishing results that must be attributable (research checkpoints, financial actions, releases).</li>
           </ul>
           <p>
-            You choose the cadence. The important part is that each certificate creates an auditable timeline of commitments.
+            You choose the cadence. The important part is that each record creates an auditable timeline of commitments.
           </p>
 
           <div class="hero-actions" style="margin-top:1.2rem">

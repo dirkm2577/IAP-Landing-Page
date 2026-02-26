@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IAP Docs | Example Debugging Scenario</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <main class="section">
+      <div class="container prose">
+        <h1>Example Debugging Scenario</h1>
+        <ol>
+          <li>Track and anchor agent state at deployment `A`.</li>
+          <li>Issue continuity checkpoint `sequence=42`.</li>
+          <li>Agent behavior changes after a silent memory rewrite.</li>
+          <li>Verifier checks next checkpoint and detects mismatch/fork.</li>
+          <li>Team bisects changes between checkpoints to isolate root cause.</li>
+        </ol>
+        <p>IAP gives an auditable timeline to narrow debugging scope quickly.</p>
+        <p><a href="../index.html">Back to landing page</a></p>
+      </div>
+    </main>
+  </body>
+</html>

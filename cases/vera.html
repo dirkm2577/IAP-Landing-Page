@@ -21,7 +21,7 @@
             <li><a href="/#how">How It Works</a></li>
             <li><a href="/#cases">Case Studies</a></li>
             <li><a href="/#quickstart">Quickstart</a></li>
-            <li><a href="/#public-key">Public Key</a></li>
+            <li><a href="/#registry-public-key">Public Key</a></li>
             <li><a href="/#trust">Trust & Security</a></li>
           </ul>
         </nav>
@@ -84,7 +84,7 @@
           
 <div class="diagram">
   <div class="callout"><strong>Core flow:</strong> Anchor canonical configuration manifests to detect declared configuration drift over time.</div>
-  <div class="flow" aria-label="IAP certificate flow">
+  <div class="flow" aria-label="IAP state continuity flow">
     <div class="flow-box">
       <h3>Identity Anchor</h3>
       <p>Establish identity for <span class="mono">agent_id</span> derived from an Ed25519 key.</p>
@@ -129,7 +129,7 @@
 <p>Vera defines a canonical configuration manifest. It is deterministically</p>
 <p>serialized and hashed.</p>
 
-<p>The hash is anchored via Continuity Certificates.</p>
+<p>The hash is anchored via Continuity records.</p>
 
 <p>This publicly attests:</p>
 
@@ -146,7 +146,7 @@
 
 <ul>
 <li>A new hash is generated</li>
-<li>A new Continuity Certificate is issued</li>
+<li>A new Continuity record is issued</li>
 </ul>
 
 <p>Observers can detect when declared configuration commitments changed.</p>
