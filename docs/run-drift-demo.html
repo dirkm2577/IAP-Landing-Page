@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IAP Docs | 5-Minute Drift Demo</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <main class="section">
+      <div class="container prose">
+        <h1>5-Minute Drift Demo</h1>
+        <p>This demo shows the core value of IAP: detect silent state mutation.</p>
+        <ol>
+          <li>Start from a clean virtual environment.</li>
+          <li>Install the SDK and AMCS adapter.</li>
+          <li>Generate an initial deterministic state root.</li>
+          <li>Verify baseline is valid.</li>
+          <li>Mutate state history and verify drift is detected.</li>
+        </ol>
+        <pre class="code-block"><code>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install iap-agent
+python -m pip install -e /path/to/AMCS-0.1
+python /path/to/iap-sdk/examples/state-drift-demo/demo.py</code></pre>
+        <p>Expected terminal result includes:</p>
+        <pre class="code-block"><code>verify_before_ok=True
+verify_after_ok=False</code></pre>
+        <p>
+          The first check confirms continuity before mutation. The second check fails after state tampering,
+          proving detectable drift.
+        </p>
+        <p><a href="../index.html">Back to landing page</a></p>
+      </div>
+    </main>
+  </body>
+</html>

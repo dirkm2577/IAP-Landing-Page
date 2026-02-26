@@ -95,7 +95,7 @@
       <section id="how" class="section">
         <div class="container">
           <h2>Install → Init → Track → Anchor → Commit → Verify</h2>
-          <div class="flow" aria-label="IAP certificate flow">
+          <div class="flow" aria-label="IAP state continuity flow">
             <div class="flow-box">
               <h3>Track</h3>
               <p>Canonicalize key files and append state events into AMCS to produce deterministic checkpoints.</p>
@@ -170,9 +170,10 @@ iap init
 iap track
 iap anchor --local-only
 iap commit "updated objective"
-iap verify ./certificate.json --registry-public-key-b64 &lt;key&gt;</code></pre>
+iap verify ./continuity_record.json --registry-public-key-b64 &lt;key&gt;</code></pre>
           <div class="hero-actions" style="margin-top:0.8rem">
             <a class="btn btn-primary" href="https://github.com/identity-anchor-protocol/iap_sdk" target="_blank" rel="noopener noreferrer">Get the SDK</a>
+            <a class="btn btn-secondary" href="docs/run-drift-demo.html">Run the 5-minute drift demo</a>
             <a class="btn btn-secondary" href="docs/model-randomness-vs-state-mutation.html">Read technical docs</a>
           </div>
         </div>
@@ -183,7 +184,7 @@ iap verify ./certificate.json --registry-public-key-b64 &lt;key&gt;</code></pre>
         <div class="container">
           <h2 id="pk-title">Registry Public Key</h2>
           <p>
-            Certificates can be verified offline using the Registry public key.
+            Anchor and continuity records can be verified offline using the Registry public key.
           </p>
 
           <div class="kv" aria-label="Registry key/value details">
