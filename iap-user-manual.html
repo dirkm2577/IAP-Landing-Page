@@ -73,15 +73,15 @@
             <li>Take all your agent files (Agent/Soul/Skills etc.) OR</li>
             <li>Write two small “identity files” (an <code>AGENT.md</code> and a <code>SOUL.md</code>).</li>
             <li>Store them in your local AMCS database so you get a <code>memory_root</code> and <code>sequence</code>.</li>
-            <li>Buy and issue your one-time <strong>Identity Anchor</strong> record.</li>
-            <li>Buy and issue a <strong>Continuity</strong> record for the latest <code>memory_root</code>/<code>sequence</code>.</li>
+            <li>Issue your one-time <strong>Identity Anchor</strong> record.</li>
+            <li>Issue a <strong>Continuity</strong> record for the latest <code>memory_root</code>/<code>sequence</code>.</li>
             <li>Download the record and verify it locally (if you already saved the Registry public key the signature verification math is done locally.
               No API call is required during the cryptographic check itself).</li>
           </ol>
 
           <div class="callout">
             <p><strong>Good mental model:</strong> Identity Anchor is the agent’s “birth record”. Continuity records are “dated notarizations”
-              that the same agent identity reached a particular state checkpoint at a particular time.</p>
+              that the same agent reached a particular state checkpoint at a particular time.</p>
           </div>
         </div>
       </section>
@@ -111,7 +111,7 @@ python -m pip install iap-agent</code></pre>
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Step 3 — Create the identity files you want to commit to</h2>
+          <h2>Step 3 — Create the agent (identity) files you want to commit OR</h2>
           <p>Create two small files. They can be minimal — you can evolve them later.</p>
           <pre class="code-block"><code>cat &gt; AGENT.md &lt;&lt;'EOF'
 # Atlas
