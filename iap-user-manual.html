@@ -133,12 +133,8 @@ EOF</code></pre>
             <li>a new <code>memory_root</code> (hash checkpoint), and</li>
             <li>a new <code>sequence</code> number.</li>
           </ul>
-          <p>If your repo includes the helper script, run:</p>
-          <pre class="code-block"><code>python scripts/append_agent_files_to_amcs.py \
-  --amcs-db ./amcs.db \
-  --agent-id &lt;agent_id&gt; \
-  --agent-file ./AGENT.md \
-  --soul-file ./SOUL.md</code></pre>
+          <p>Append the tracked files into your local AMCS database:</p>
+          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --agent-id &lt;agent_id&gt; --file ./AGENT.md --file ./SOUL.md --json</code></pre>
           <p>The command prints the latest <code>memory_root</code>.</p>
 
           <p>You can also confirm root + sequence with:</p>
@@ -149,7 +145,7 @@ EOF</code></pre>
       <section class="section section-alt">
         <div class="container prose">
           <h2>Step 5 — Issue your Identity Anchor (one-time)</h2>
-          <p>This creates a request and sends you to payment. After payment, the Registry issues the anchor record.</p>
+          <p>This creates the request. If your account has remaining API-key quota, the Registry may certify it immediately. Otherwise it returns a payment handoff.</p>
           <pre class="code-block"><code>iap-agent anchor issue \
   --registry-base "$REGISTRY_BASE" \
   --agent-name "Atlas" \
@@ -176,13 +172,16 @@ EOF</code></pre>
           <p>1) Create the continuity request from your AMCS database:</p>
           <pre class="code-block"><code>iap-agent continuity request --registry-base "$REGISTRY_BASE" --amcs-db ./amcs.db --json</code></pre>
 
-          <p>2) Pay for it using the <code>request_id</code> printed above:</p>
+          <p>2) If the response is already <code>CERTIFIED</code>, skip payment. Otherwise pay for it using the <code>request_id</code> printed above:</p>
           <pre class="code-block"><code>iap-agent continuity pay \
   --registry-base "$REGISTRY_BASE" \
   --request-id &lt;request_id&gt; \
   --payment-provider auto \
   --open-browser \
   --json</code></pre>
+
+          <p>If the Registry reports that the submitted <code>sequence</code> is stale, inspect the current registry state:</p>
+          <pre class="code-block"><code>iap-agent registry status --registry-base "$REGISTRY_BASE" --agent-id &lt;agent_id&gt; --json</code></pre>
 
           <div class="callout">
             <p><strong>What the Registry actually checks:</strong> that the request is signed by the anchored agent key, and that the submitted
@@ -197,7 +196,8 @@ EOF</code></pre>
           <p>Wait for issuance, fetch the continuity record JSON, then verify it locally:</p>
           <pre class="code-block"><code>iap-agent continuity wait --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --json
 iap-agent continuity cert --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json
-iap-agent verify ./continuity_record.json --registry-base "$REGISTRY_BASE" --json</code></pre>
+REGISTRY_PUBLIC_KEY_B64="$(curl -s "$REGISTRY_BASE/registry/public-key" | jq -r .public_key_b64)"
+iap-agent verify ./continuity_record.json --registry-public-key-b64 "$REGISTRY_PUBLIC_KEY_B64" --json</code></pre>
           <p>Expected result:</p>
           <pre class="code-block"><code>{"ok": true, "reason": "ok"}</code></pre>
         </div>
