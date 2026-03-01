@@ -378,6 +378,12 @@
           <p class="note" style="margin-top:1rem;">
             Notes: The transcript is presented as-is. It illustrates continuity and key custody behavior, not determinism or alignment.
           </p>
+          <p class="note">
+            Version note: the current beta deployment keeps the protocol at <code>IAP-0.1</code>. The
+            continuity certificate subtype remains <code>IAP-Continuity-0.2</code> for compatibility with the
+            existing issued chain and verification vectors. That subtype is a compatibility label, not a
+            separate protocol generation.
+          </p>
         </div>
       </section>
 
@@ -389,6 +395,11 @@
           <p>
             IAP is a minimal protocol for tamper-evident agent state continuity and offline verification.
             It binds an agent identity to an Ed25519 keypair, produces canonicalized commitments, and supports independent verification.
+          </p>
+          <p class="note">
+            The beta protocol line is <code>IAP-0.1</code>. If you see
+            <code>IAP-Continuity-0.2</code> inside a continuity certificate, that is an intentional
+            compatibility subtype retained for the deployed v0.1.x ecosystem.
           </p>
           <div class="grid" style="margin-top:1rem;">
             <div class="card">
