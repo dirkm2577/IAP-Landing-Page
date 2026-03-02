@@ -559,7 +559,7 @@ h2 {
 .prose ul { margin: 0.8rem 0 0.8rem 1.2rem; }
 .prose code { background: rgba(255,255,255,0.55); padding: 0.1rem 0.35rem; border-radius: 8px; border: 1px solid var(--border); }
 .prose pre { overflow:auto; padding: 1rem; background: rgba(255,255,255,0.55); border: 1px solid var(--border); border-radius: 12px; }
-.prose { max-width: 80ch; }
+.prose { max-width: clamp(80ch, 90vw, 120ch); }
 
 @media (min-width: 900px) {
   .card-grid {
