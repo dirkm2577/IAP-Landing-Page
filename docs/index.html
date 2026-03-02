@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Public IAP user documentation for setup, upgrades, quota, troubleshooting, and beta onboarding."
+    />
+    <title>IAP Docs | Public Beta Docs</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Docs</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="../index.html">Landing Page</a></li>
+            <li><a href="quickstart.html">Quickstart</a></li>
+            <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            <li><a href="beta-onboarding.html">Beta Onboarding</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="docs-title">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Public Beta Docs</p>
+            <h1 id="docs-title">
+              Public docs for
+              <span>IAP users and operators</span>
+            </h1>
+            <p class="hero-subhead">
+              Use this docs hub for first-time setup, updating an existing agent, quota expectations, common recovery
+              paths, and beta access.
+            </p>
+            <p class="hero-subhead">
+              Approved users currently start on the built-in free tier, and operators can extend quota through plan
+              changes or add-ons when the pilot requires more capacity.
+            </p>
+            <p class="disclaimer">
+              This is the user-facing documentation surface. Technical background notes remain available separately.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="quickstart.html">Open quickstart</a>
+              <a class="btn btn-secondary" href="update-existing-agent.html">Update an existing agent</a>
+            </div>
+          </div>
+
+          <aside class="status-card" aria-label="Docs coverage">
+            <h2>Docs Coverage</h2>
+            <p class="status status-ok">5 user guides</p>
+            <p class="status-note">
+              Setup, upgrade, plan selection, troubleshooting, and beta onboarding are all covered here.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-alt" aria-labelledby="guides-title">
+        <div class="container">
+          <h2 id="guides-title">Start with the guide that matches your task</h2>
+          <div class="tiles">
+            <a class="tile" href="quickstart.html">
+              <p class="tile-sub">First beta run</p>
+              <h3>Quickstart</h3>
+              <p>Install iap-agent, create a project-local identity, certify local state, and verify the result offline.</p>
+              <span class="tile-cta">Read quickstart</span>
+            </a>
+            <a class="tile" href="update-existing-agent.html">
+              <p class="tile-sub">Upgrade path</p>
+              <h3>Update existing agent</h3>
+              <p>Preserve continuity while updating package versions, prompts, state snapshots, or deployment hosts.</p>
+              <span class="tile-cta">Read update guide</span>
+            </a>
+            <a class="tile" href="plans-and-quota.html">
+              <p class="tile-sub">Operational limits</p>
+              <h3>Plans and quota</h3>
+              <p>Understand what the public beta includes, which limits matter, and when to request more capacity.</p>
+              <span class="tile-cta">Read plan details</span>
+            </a>
+            <a class="tile" href="troubleshooting.html">
+              <p class="tile-sub">Recovery steps</p>
+              <h3>Troubleshooting</h3>
+              <p>Resolve common install, signing, verification, and continuity mismatch issues without guessing.</p>
+              <span class="tile-cta">Read troubleshooting</span>
+            </a>
+            <a class="tile" href="beta-onboarding.html">
+              <p class="tile-sub">Access and rollout</p>
+              <h3>Beta onboarding</h3>
+              <p>Know what to prepare before access, what information to send, and how the beta activation flow works.</p>
+              <span class="tile-cta">Read onboarding</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="technical-title">
+        <div class="container">
+          <h2 id="technical-title">Technical background</h2>
+          <p>
+            If you need protocol boundaries or deeper continuity mechanics, the original technical notes are still
+            available.
+          </p>
+          <div class="card-grid">
+            <div class="card">
+              <h3>Core concepts</h3>
+              <ul class="trust-list">
+                <li><a href="model-randomness-vs-state-mutation.html">Model randomness vs state mutation</a></li>
+                <li><a href="what-iap-tracks.html">What IAP tracks</a></li>
+                <li><a href="what-iap-does-not-track.html">What IAP does not track</a></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Hands-on examples</h3>
+              <ul class="trust-list">
+                <li><a href="example-debugging-scenario.html">Example debugging scenario</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Public user documentation</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="../index.html">Landing Page</a></li>
+          <li><a href="quickstart.html">Quickstart</a></li>
+          <li><a href="troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

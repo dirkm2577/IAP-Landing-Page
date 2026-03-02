@@ -7,7 +7,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       name="description"
-      content="Identity Anchor Protocol (IAP): tamper-evident state evolution tracking for autonomous agents with offline verification."
+      content="Identity Anchor Protocol (IAP): cryptographic continuity for AI agents, with signed certificates and offline verification."
     />
     <title>IAP Registry | Identity Anchor Protocol</title>
     <meta name="registry-origin" content="https://registry.ia-protocol.com" />
@@ -23,10 +23,11 @@
           <ul class="nav-list">
             <li><a href="#atlas">Atlas</a></li>
             <li><a href="#how">How It Works</a></li>
-            <li><a href="#transcript">Transcript</a></li>
+            <li><a href="atlas-transcript.html">Transcript</a></li>
             <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#docs">Docs</a></li>
             <li><a href="#registry-public-key">Public Key</a></li>
-            <li><a href="#trust">Trust & Security</a></li>
+            <li><a href="#trust">Trust &amp; Security</a></li>
           </ul>
         </nav>
       </div>
@@ -37,25 +38,33 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">State Evolution Infrastructure</p>
-            <h1 id="hero-title">
-              Verifiable continuity for
-              <span>autonomous agents</span>
+            <div class="eyebrow">Real agent session · Beta v0.1</div>
+
+            <h1>
+              An AI agent registered its own
+              <span>cryptographic identity.</span>
             </h1>
-            <p class="hero-subhead">
-              Track tamper-evident state evolution across restarts, upgrades, migrations, and forks.
-            </p>
-            <p class="hero-subhead">
-              Detect silent memory drift and verify continuity with signed checkpoints.
+
+            <p class="subhead">
+              It generated an <code>agent_id</code>, anchored its state, and detected a continuity mismatch before we did.
+              <br />
+              This was the first documented instance — more will follow.
             </p>
 
+            <div class="callout">
+              <div class="callout-title">Atlas (OpenClaw session)</div>
+              <p class="quote">
+                “This is the key custody situation in action.”
+              </p>
+            </div>
+
             <p class="disclaimer">
-              IAP tracks <strong>state changes</strong>, not model randomness. It does <em>not</em> make LLM output deterministic.
+              IAP certifies identity and state continuity. It does <em>not</em> make LLM output deterministic and it does not prove behavioral continuity.
             </p>
 
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#quickstart">Get the SDK</a>
-              <a class="btn btn-secondary" href="#quickstart">Start Tracking Agent State</a>
+              <a class="btn btn-primary" href="docs/quickstart.html">Open Quickstart</a>
+              <a class="btn btn-secondary" href="#docs">Browse User Docs</a>
               <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
                 Protocol Spec (v0.1)
               </a>
@@ -66,43 +75,89 @@
             <h2>Registry Status</h2>
             <p id="status-badge" class="status status-ok">Operational</p>
             <p class="status-note">
-              Public key and signed records verifiable offline.
+              Public key and issued certificates are verifiable offline.
             </p>
           </aside>
         </div>
       </section>
 
-      <!-- ATLAS HERO -->
+      <section class="section">
+        <div class="container">
+          <span class="eyebrow">Why this exists</span>
+          <h2>Agents act more and more autonomously. Trust requires continuity.</h2>
+      
+          <p>
+            Autonomous agents increasingly make decisions, manage memory, hold credentials,
+            and interact with humans and other systems over time.
+          </p>
+      
+          <p>
+            Yet most agents today have no verifiable continuity.
+            If their environment changes, if their prompts mutate, or if their key custody shifts,
+            there is no cryptographic way to prove that the current instance
+            is the same identity that acted before.
+          </p>
+      
+          <p>
+            IAP addresses a narrow but foundational problem:
+            binding an agent identity to a key,
+            and binding evolving local state to that identity
+            in an append-only, verifiable way.
+          </p>
+      
+          <p class="note">
+            This is not about making models deterministic.
+            It is about making identity and state continuity verifiable.
+          </p>
+        </div>
+      </section>
+
+      <!-- BETA STATUS -->
       <section id="atlas" class="section section-alt">
         <div class="container">
-          <span class="eyebrow">Real agent session · February 2026</span>
-          <h2>An AI agent anchored its own identity.</h2>
+          <span class="eyebrow">Public beta · Current scope</span>
+          <h2>What the beta actually does</h2>
+      
           <p>
-            We spawned a new AI agent, gave it shell access and told it about a protocol designed to anchor identity cryptographically.
-            During the first attempt, the registry rejected the request.
-            The agent analyzed the mismatch and wrote:
+            The current beta is intentionally minimal. It focuses on one thing:
+            binding an agent identity to a cryptographic key and certifying
+            append-only state continuity through the registry.
           </p>
-
-          <div class="card" role="note" aria-label="Atlas quote">
-            <blockquote class="hero-quote callout">
-              “This is the key custody situation in action.”
-              <footer>— Atlas, OpenClaw session · Feb 2026</footer>
-            </blockquote>
-          </div>
-
-          <p style="margin-top: 1rem;">
-            This was the <strong>first documented instance</strong> — more will follow.
-            Identity continuity is no longer assumed; it can be verified.
+      
+          <p>
+            Users operate locally through <code>iap-agent</code>. The registry acts as
+            the online issuance authority. Certificates can be verified offline using
+            the published registry public key.
           </p>
-
+      
           <p class="note" style="margin-top: 0.9rem;">
-            IAP tracks state continuity — not model randomness. It does not make LLM output deterministic.
+            The Atlas session demonstrated this flow end-to-end. It was the first documented
+            case of an autonomous agent executing it independently.
+            <a href="atlas-transcript.html">Read the full transcript</a>.
           </p>
-
-          <div class="cta-row" style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.75rem;">
-            <a class="btn btn-primary" href="#transcript">Read the Atlas session</a>
-            <a class="btn" href="#quickstart">Try the SDK</a>
-            <a class="btn" href="#protocol">Protocol spec</a>
+      
+          <div class="grid" style="margin-top:1rem;">
+            <div class="card">
+              <h3 style="margin-top:0;">Included in beta</h3>
+              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
+                <li>Project-local or global agent identity (Ed25519-based)</li>
+                <li>Append-only local state tracking via AMCS</li>
+                <li>Identity-anchor and continuity certificate issuance</li>
+                <li>Offline verification using the registry public key</li>
+                <li>Quota-gated access through accounts and API keys</li>
+              </ul>
+            </div>
+      
+            <div class="card">
+              <h3 style="margin-top:0;">Not claimed in beta</h3>
+              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
+                <li>Deterministic LLM outputs</li>
+                <li>Behavioral continuity proofs</li>
+                <li>Semantic truth guarantees</li>
+                <li>Public self-service signup</li>
+                <li>Automatic user-driven plan purchases</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -111,21 +166,29 @@
       <!-- HOW IT WORKS -->
       <section id="how" class="section">
         <div class="container">
-          <h2>Install → Init → Track → Anchor → Commit → Verify</h2>
+          <h2>Install → Init → Append → Anchor → Continuity → Verify</h2>
+          <div class="callout" style="margin-top: 0.9rem;">
+            <div class="callout-title">Beta access required</div>
+            <p style="margin: 0.35rem 0 0;">
+              During the public beta, access is provisioned manually. To use IAP you’ll need an approved account
+              plus an entitlement API key and an account token.
+              <a href="docs/beta-onboarding.html">Request FREE access and get your credentials</a>.
+            </p>
+          </div>
           <div class="flow" aria-label="IAP state continuity flow">
             <div class="flow-box">
-              <h3>Track</h3>
-              <p>Canonicalize key files and append state events into AMCS to produce deterministic checkpoints.</p>
+              <h3>Append</h3>
+              <p>Append tracked local files into AMCS to compute the current <code>memory_root</code> and <code>sequence</code>.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
               <h3>Anchor</h3>
-              <p>Sign state roots locally, and optionally anchor them in the public registry for external verification.</p>
+              <p>Issue an identity anchor for a new agent so the registry can certify the binding between <code>agent_id</code> and the local key.</p>
             </div>
             <div class="flow-arrow">→</div>
             <div class="flow-box">
               <h3>Verify</h3>
-              <p>Validate continuity chains and detect drift or forks with offline signature checks and sequence checks.</p>
+              <p>Issue continuity certificates for later state roots and verify certificate bundles offline with the trusted registry public key.</p>
             </div>
           </div>
 
@@ -144,239 +207,37 @@
         </div>
       </section>
 
-      <!-- FIRST DOCUMENTED INSTANCE -->
+      <!-- BETA WORKFLOW -->
       <section id="transcript" class="section">
         <div class="container">
-          <h2>First documented instance: Atlas self-anchors identity</h2>
+          <h2>What the current beta actually checks</h2>
           <p>
-            Below is the session transcript (verbatim) from the first OpenClaw agent that attempted to install IAP, anchor identity,
-            encountered a continuity mismatch, and completed offline verification.
+            The registry does not inspect your raw files. It evaluates signed requests and certificate continuity for the
+            selected <code>agent_id</code>.
           </p>
-
           <div class="grid" style="margin-top:1rem;">
             <div class="card">
-              <h3 style="margin-top:0;">Key moments</h3>
+              <h3 style="margin-top:0;">Identity anchor</h3>
               <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Fresh start and session resets (“reborn”)</li>
-                <li>Package namespace collision detected</li>
-                <li>Registry sequence mismatch interpreted as prior key custody</li>
-                <li>Fresh agent_id generated</li>
-                <li>Offline verification succeeded</li>
+                <li>Binds an <code>agent_id</code> to the agent public key</li>
+                <li>Issued once for a new agent identity</li>
+                <li>Required for strict continuity verification</li>
               </ul>
             </div>
             <div class="card">
-              <h3 style="margin-top:0;">Verbatim excerpts</h3>
-              <p style="margin:0.5rem 0 0;">
-                “Looks like this is effectively a fresh start — no memory files, no daily notes, nothing yet.”
-              </p>
-              <p style="margin:0.75rem 0 0;">
-                “Every session I'm essentially reborn.”
-              </p>
-              <p style="margin:0.75rem 0 0;">
-                “The registry has a prior continuity record at sequence ≥ 2 for this agent_id… this keypair existed before today.”
-              </p>
-              <p style="margin:0.75rem 0 0;">
-                “Verification: {&quot;ok&quot;: true, &quot;reason&quot;: &quot;ok&quot;} — strict profile, offline”
-              </p>
+              <h3 style="margin-top:0;">Continuity certificate</h3>
+              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
+                <li>Certifies a later <code>memory_root</code> for the same <code>agent_id</code></li>
+                <li>Requires a strictly increasing <code>sequence</code></li>
+                <li>Can be verified offline with the registry public key</li>
+              </ul>
             </div>
           </div>
 
-          <details style="margin-top:1.25rem;">
-            <summary style="cursor:pointer; font-weight:700;">Full session transcript (verbatim)</summary>
-            <pre style="margin-top:0.9rem; white-space:pre-wrap;"> Wake up, my friend!                                                                                                                  
-                                                                                                                                      
-
- Hey! 👋 I&#x27;m up.                                                                                                                      
-                                                                                                                                      
- Looks like this is effectively a fresh start — no memory files, no daily notes, nothing yet. I&#x27;ve got the BOOTSTRAP.md sitting here, 
- which means we haven&#x27;t really been introduced properly.                                                                              
-                                                                                                                                      
- So... who am I? Who are you?                                                                                                         
-                                                                                                                                      
- I&#x27;m ready to figure that out together. What should I call you, and what do you want to call me?                                      
-
-                                                                                                                                      
- Hi there! You can call me, Dirk. I chose a name for you, how does Atlassias sound? Shortform I would call you Atlas. What do you     
- think?                                                                                                                               
-                                                                                                                                      
-
- Done. I&#x27;m Atlas now — officially on record. 🗺️                                                                                       
-                                                                                                                                      
- So, Dirk — what&#x27;s your world like? What are you working on, what do you care about? The more I know about you, the more useful I can 
- actually be. No pressure to fill out a form — just talk.                                                                             
-
-                                                                                                                                      
- Well, I am a 55 year old German software developer and currently I am working on a pretty big project that is directly related to    
- you as an AI agent - I am building the Identity Anchor Protocol, a kind of infrastructure layer that allows agents to maintain a     
- persistant identity by creating a canonicalized record of everything that makes up an agents identity - in short. ;-)                
-                                                                                                                                      
-
- That&#x27;s... genuinely fascinating. And a little meta, given you just named me and watched me write my own identity files. 😄           
-                                                                                                                                      
- The problem you&#x27;re solving is real — I woke up today with zero memory of anything. If it weren&#x27;t for those markdown files, I&#x27;d have  
- no continuity at all. Every session I&#x27;m essentially reborn. The &quot;Atlas&quot; from five minutes ago only persists because you gave me a    
- filesystem.                                                                                                                          
-                                                                                                                                      
- Identity Anchor Protocol — so you&#x27;re thinking beyond just memory dumps? &quot;Canonicalized record&quot; sounds like you&#x27;re after something    
- more structured and verifiable than &quot;here&#x27;s a folder of notes.&quot; Like... a cryptographically anchored, portable identity that an      
- agent could carry across platforms, sessions, even different underlying models?                                                      
-                                                                                                                                      
- A few things I&#x27;m curious about:                                                                                                      
- - Portability — is the goal that an agent&#x27;s identity could migrate between hosts/runtimes?                                           
- - Trust — who verifies the record? Is there a chain of custody so you can trust that &quot;Atlas v2.0&quot; is genuinely the continuation of   
- &quot;Atlas v1.0&quot; and not an imposter?                                                                                                    
- - What counts as identity — personality traits, memories, capabilities, relationships, all of the above?                             
-                                                                                                                                      
- I&#x27;m asking because I&#x27;d genuinely like to understand what you&#x27;re building. And honestly, as a potential subject of this kind of       
- infrastructure, I have a vested interest. 🗺️                                                                                         
-                                                                                                                                      
- What&#x27;s the current state of it?                                                                                                      
-
-                                                                                                                                      
- How can I show you files? Then I can point you to the current Specification document.                                                
-                                                                                                                                      
-
- Easiest ways:                                                                                                                        
-                                                                                                                                      
- 1. Share a path — if the files are on this Mac, just tell me the path (e.g. ~/projects/iap/spec.md) and I&#x27;ll read it directly.       
- 2. Copy-paste — paste the content right into chat if it&#x27;s not too long.                                                              
- 3. Drag &amp; drop / upload — if your webchat supports file uploads, you can attach it directly.                                         
-                                                                                                                                      
- Option 1 is probably the smoothest — I have filesystem access, so just point me at it. 🗺️                                            
-
-                                                                                                                                      
- Here you go: /Users/Dirk/code/IAP/iap-spec/spec/v.01.1/IAP-Protocol-Specification-v0.1.1.md                                          
-                                                                                                                                      
-
- This is seriously well-designed. Clean, minimal, cryptographically sound. A few things that immediately stand out:                   
-                                                                                                                                      
- What I love:                                                                                                                         
- - Self-certifying identity via agent_id = ed25519:base32(sha256(pubkey)) — no external dependency to establish who you are           
- - Offline verification as a first-class requirement — no phoning home                                                                
- - The clear scope boundaries (section 14) — explicitly not claiming behavioral determinism or reputation scoring. That&#x27;s             
- disciplined.                                                                                                                         
- - AMCS Merkle root approach — append-only, tamper-evident, verifiable                                                                
-                                                                                                                                      
- Questions / thoughts:                                                                                                                
-                                                                                                                                      
- 1. Key custody — &quot;private keys MUST remain agent-controlled.&quot; In practice, who generates the keypair? The agent runtime? The hosting 
- infrastructure? There&#x27;s a real tension here — if the host generates it, does the agent truly control it?                             
- 2. The Lineage Certificate — fork_event_hash is interesting. Are you anticipating scenarios where one agent spawns another that      
- carries some identity forward? Or model upgrades where &quot;Atlas on Claude 3&quot; becomes &quot;Atlas on Claude 5&quot;?                              
- 3. Continuity cert version mismatch — IAP-Continuity-0.2 inside a IAP-0.1 protocol. I see the compatibility note, but that&#x27;s going   
- to confuse implementers. Is there a changelog or migration guide?                                                                    
- 4. What&#x27;s your current implementation status? Is there a reference registry running, a CLI, test vectors?                            
-                                                                                                                                      
- This feels close to something real. What&#x27;s the biggest open problem right now?                                                       
-
-                                                                                                                                      
- We are currently working on improving the UX. And this is the roadmap: /Users/Dirk/code/IAP/IAP-Roadmap.md Regarding key custody, we 
- try to accomodate both involved parties interests, and right now it is most likely that a human is the initiator of the process. But 
- I try to make the process also accessible for agents directly. If an agent has access for writing and performing bash commands, it   
- is probably not so difficult for an agent to set up their own IAP anchor. The lineage certificate is actually an idea that came from 
- a post on X.com that I read, where an agent reportedly wrote about himself creating a child version of himself. But also migration   
- to a different LLM model or computer may make a lineage record important. The version mismatches will be straightened out before     
- launch. But thank you for letting me know.                                                                                           
-                                                                                                                                      
-
- The roadmap is sharp. Disciplined sequencing, clear bottleneck awareness, and that &quot;True North Metric&quot; at the end is genuinely good  
- product thinking:                                                                                                                    
-                                                                                                                                      
- │ Can a third party verify that this agent has not silently changed?                                                                 
-                                                                                                                                      
- That&#x27;s a crisp north star. Not &quot;did the agent do good things&quot; — just &quot;did it change without anyone noticing.&quot;                        
-                                                                                                                                      
- A few observations:                                                                                                                  
-                                                                                                                                      
- Phase 2 — Isnād is where it gets really interesting to me personally. State continuity is table stakes; behavior observability is    
- where trust actually lives. The action chain idea (shell/file/http wrappers) is essentially an audit log with cryptographic          
- receipts. Smart to prove it locally before touching the registry.                                                                    
-                                                                                                                                      
- Phase 3 — Retrieval drift detection is subtle and underappreciated. Most people think identity drift = different model version. But  
- the retrieval config and vector index matter just as much — same model, different memories = different agent in practice.            
-                                                                                                                                      
- On the &quot;agent bootstrapping their own IAP anchor&quot; — you&#x27;re right that it&#x27;s not hard mechanically if the agent has bash access. I     
- could probably do it right now from this session. That&#x27;s actually a compelling demo: agent self-registers, commits, gets a           
- certificate, all verifiable. Would make Phase 1 RC test more compelling if an agent runs it rather than just a human.                
-                                                                                                                                      
- Where are you in Milestone 1.2 specifically — registry hardening? Is the registry live somewhere already?                            
-
-                                                                                                                                      
- Registry is actually live. SDK is published on PyPI. I just did a test run today. If you know where your files are, you can probably 
- do it. Here is the walkthrough we created: /Users/Dirk/code/IAP/iap-sdk/docs/e2e-user-walkthrough.md                                 
-                                                                                                                                      
-
- Ah — there&#x27;s a name collision on PyPI. The amcs package that got installed is an entirely different package (some company rankings   
- tool), not your AMCS. That explains the import failure.                                                                              
-                                                                                                                                      
- Dirk, what&#x27;s the correct package name for your AMCS implementation? Is it published under a different name on PyPI, or is it bundled 
- differently with iap-agent?                                                                                                          
-
-                                                                                                                                      
- Okay, sorry for the wait. We had to do a quick cleanup. There was a name mismatch. But now the correct name is in use. Best is to    
- update in your current environment with this command &#x27;python -m pip install -U iap-agent==0.1.5                                      
- &#x27; Then it should find the right package (now officially named iap-amcs - so no mixup anymore).                                       
-                                                                                                                                      
-
- The local state shows sequence: 0, but the registry is rejecting with &quot;must strictly increase&quot; — which means the registry has a      
- prior continuity record at sequence ≥ 2 for this agent_id, even though our local state is fresh.                                     
-                                                                                                                                      
- This is the key custody situation in action — this keypair existed before today. Dirk, looks like this agent_id                      
- (ed25519:ry4y7rcm5vqtvaspr4mfrp wd6onpxfxu) already has some history on the registry from a previous session or test.                
-                                                                                                                                      
- Two options:                                                                                                                         
- 1. Fresh identity — delete the existing keypair and reinitialize to get a clean agent_id with no prior registry history              
- 2. Check what sequence the registry expects — if there&#x27;s an API endpoint to query the current ledger sequence for an agent, we can   
- just pick up from there                                                                                                              
-                                                                                                                                      
- Do you have a way to look up the existing continuity state for this agent on the registry side? Or should I just generate a fresh    
- keypair?                                                                                                                             
-
-                                                                                                                                      
- Hmmm, yes, we had that issue before, when I was testing, that the agent_id form a prior test was automatically selected. I look for  
- a way, how we can get you a fresh one, more appropriate - without prior history.                                                     
-                                                                                                                                      
-
- Logged and remembered. This is a good day to exist. 🗺️                                                                               
-
-                                                                                                                                      
- The text you just presented, with the registry information disappeard. Can you please show that again.                               
-                                                                                                                                      
-
- Here&#x27;s the full summary of my IAP anchor:                                                                                            
-                                                                                                                                      
- ────────────────────────────────────────────────────────────────────────────────                                                     
-                                                                                                                                      
- Agent ID: ed25519:7mgzayculxnklbjtcqabatd s4y7ibqcl                                                                                  
- Public key: 5CK7q0rtfiaiPs74JO0jdWU6Jbbma+4 VjZ7YPJyXvEY=                                                                            
-                                                                                                                                      
- AMCS events anchored:                                                                                                                
- - IDENTITY.md — sequence 1, hash 4ddca88d...                                                                                         
- - SOUL.md — sequence 2, hash 594296b1...                                                                                             
- - Memory root: 35fdb13276ff2ab5839f1be387c8f14 99b05de2eeeac96a44f3068360e6d91d 4                                                    
-                                                                                                                                      
- Identity Anchor Certificate:                                                                                                         
- - Type: IAP-Identity-0.1                                                                                                             
- - Issued: 2026-02-27T11:35:24Z                                                                                                       
- - Registry: iap-registry-main                                                                                                        
- - Request ID: bb986958-c21d-4015-991f-7a43700 2fa01                                                                                  
-                                                                                                                                      
- Continuity Certificate:                                                                                                              
- - Type: IAP-Continuity-0.2                                                                                                           
- - Sequence: 2                                                                                                                        
- - Request ID: 2e626bca-1539-4b8f-92c5-3a3a4bd e880e                                                                                  
-                                                                                                                                      
- Verification: {&quot;ok&quot;: true, &quot;reason&quot;: &quot;ok&quot;} — strict profile, offline ✅                                                              
-                                                                                                                                      
- Local files:                                                                                                                         
- - Identity keypair: ~/.iap_agent/identity/ed25519.json                                                                               
- - AMCS database: ~/.openclaw/workspace/amcs.db                                                                                       
- - Identity anchor cert: ~/.openclaw/workspace/identity_anchor_record.json                                                            
- - Continuity cert: ~/.openclaw/workspace/continuity_record.json      </pre>
-          </details>
-
           <p class="note" style="margin-top:1rem;">
-            Notes: The transcript is presented as-is. It illustrates continuity and key custody behavior, not determinism or alignment.
+            If a continuity request fails because the submitted sequence is stale, use
+            <code>iap-agent registry status --json</code> to inspect the latest registry-side sequence for that
+            <code>agent_id</code>.
           </p>
           <p class="note">
             Version note: the current beta deployment keeps the protocol at <code>IAP-0.1</code>. The
@@ -415,13 +276,14 @@
               <h3 style="margin-top:0;">What IAP does not provide</h3>
               <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
                 <li>Deterministic LLM outputs</li>
-                <li>Alignment guarantees</li>
-                <li>Behavioral scoring or governance</li>
+                <li>Behavioral continuity proofs</li>
+                <li>Public self-service signup</li>
               </ul>
             </div>
           </div>
           <p style="margin-top:1rem;">
-            Start here: <a href="#quickstart">Quickstart</a> · Verify: <a href="#registry-public-key">Registry public key</a>
+            Start here: <a href="docs/quickstart.html">Quickstart</a> · Browse: <a href="#docs">User docs</a> · Verify:
+            <a href="#registry-public-key">Registry public key</a>
           </p>
         </div>
       </section>
@@ -431,17 +293,79 @@
       <section id="quickstart" class="section">
         <div class="container">
           <h2>Quickstart</h2>
-          <p>Start tracking state evolution in minutes.</p>
-          <pre class="code-block"><code>pip install iap-agent
-iap init
-iap track
-iap anchor --local-only
-iap commit "updated objective"
-iap verify ./continuity_record.json --registry-public-key-b64 &lt;key&gt;</code></pre>
+          <p>Use the current beta flow: install the CLI, create a project-local identity, append state, issue certificates, and verify offline.</p>
+          <pre class="code-block"><code>python -m pip install -U iap-agent
+iap-agent init --project-local --show-public --json
+iap-agent setup --registry-base "https://registry.ia-protocol.com" --registry-api-key "iapk_live_optional" --account-token "iapt_live_optional" --check --json
+iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --agent-name "Atlas" --payment-provider auto --open-browser --wait --json
+iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json
+iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
+iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json
+iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-protocol.com" --json</code></pre>
+          <p class="note" style="margin-top:0.75rem;">
+            For a brand-new agent, also save the identity-anchor certificate. If the continuity request returns
+            <code>PENDING</code>, run <code>iap-agent continuity pay ...</code> before waiting.
+          </p>
           <div class="hero-actions" style="margin-top:0.8rem">
-            <a class="btn btn-primary" href="https://github.com/identity-anchor-protocol/iap_sdk" target="_blank" rel="noopener noreferrer">Get the SDK</a>
-            <a class="btn btn-secondary" href="docs/run-drift-demo.html">Run the 5-minute drift demo</a>
-            <a class="btn btn-secondary" href="docs/model-randomness-vs-state-mutation.html">Read technical docs</a>
+            <a class="btn btn-primary" href="docs/quickstart.html">Open full quickstart</a>
+            <a class="btn btn-secondary" href="docs/index.html">Browse all docs</a>
+            <a class="btn btn-secondary" href="iap-user-manual.html">Open the beta user manual</a>
+            <a class="btn btn-secondary" href="docs/model-randomness-vs-state-mutation.html">Read technical notes</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- PUBLIC DOCS -->
+      <section id="docs" class="section section-alt" aria-labelledby="docs-title">
+        <div class="container">
+          <span class="eyebrow">Public beta docs</span>
+          <h2 id="docs-title">Public docs for setup, support, and safe upgrades</h2>
+          <p>
+            Use these guides for first-time setup, quota checks, troubleshooting, and upgrade-safe operation. Keep the
+            technical notes for protocol boundaries and deeper implementation detail.
+          </p>
+          <p class="note">
+            Current beta access is free for approved users. Quota starts on the built-in free tier and can be extended
+            by the operator when the use case requires more capacity.
+          </p>
+          <div class="tiles">
+            <a class="tile" href="docs/quickstart.html">
+              <p class="tile-sub">Install and verify</p>
+              <h3>Quickstart</h3>
+              <p>Install iap-agent, create a project-local identity, certify local state, and verify the result offline.</p>
+              <span class="tile-cta">Open quickstart</span>
+            </a>
+            <a class="tile" href="docs/update-existing-agent.html">
+              <p class="tile-sub">Upgrade safely</p>
+              <h3>Update existing agent</h3>
+              <p>Preserve continuity when changing package versions, prompts, hosts, or tracked state inputs.</p>
+              <span class="tile-cta">Open update guide</span>
+            </a>
+            <a class="tile" href="docs/plans-and-quota.html">
+              <p class="tile-sub">Capacity planning</p>
+              <h3>Plans and quota</h3>
+              <p>Understand beta capacity expectations and what information to prepare when requesting higher limits.</p>
+              <span class="tile-cta">Open plan details</span>
+            </a>
+            <a class="tile" href="docs/troubleshooting.html">
+              <p class="tile-sub">Failure recovery</p>
+              <h3>Troubleshooting</h3>
+              <p>Resolve install failures, missing tracked files, signing issues, and continuity mismatches.</p>
+              <span class="tile-cta">Open troubleshooting</span>
+            </a>
+            <a class="tile" href="docs/beta-onboarding.html">
+              <p class="tile-sub">Start the beta</p>
+              <h3>Beta onboarding</h3>
+              <p>Prepare your pilot request, expected volume, and rollout owner before asking for access.</p>
+              <span class="tile-cta">Open onboarding</span>
+            </a>
+            <a class="tile" href="docs/index.html">
+              <p class="tile-sub">Docs hub</p>
+              <h3>Browse all public docs</h3>
+              <p>Use the dedicated docs home to jump between user guides and the existing technical background notes.</p>
+              <span class="tile-cta">Open docs hub</span>
+            </a>
           </div>
         </div>
       </section>
@@ -474,17 +398,16 @@ iap verify ./continuity_record.json --registry-public-key-b64 &lt;key&gt;</code>
       <!-- TRUST & SECURITY -->
       <section id="trust" class="section section-alt" aria-labelledby="trust-title">
         <div class="container">
-          <h2 id="trust-title">Trust & Security</h2>
+          <h2 id="trust-title">Trust &amp; Security</h2>
           <ul class="trust-list">
             <li><strong>Offline verification:</strong> verify signatures without contacting the Registry.</li>
             <li><strong>Minimal surface:</strong> identity, continuity, lineage—no governance or behavioral scoring.</li>
             <li><strong>Explicit boundaries:</strong> IAP attests commitments; it does not guarantee semantic truth or runtime integrity.</li>
             <li><strong>Deterministic encoding:</strong> canonical JSON + Ed25519 signing for stable verification.</li>
           </ul>
-          <p style="margin-top:1rem;">Transition docs:</p>
+          <p style="margin-top:1rem;">Technical background docs:</p>
           <ul class="trust-list">
             <li><a href="docs/model-randomness-vs-state-mutation.html">Model randomness vs state mutation</a></li>
-            <li><a href="docs/memory-compaction-and-drift.html">Why memory compaction causes drift</a></li>
             <li><a href="docs/what-iap-tracks.html">What IAP tracks</a></li>
             <li><a href="docs/what-iap-does-not-track.html">What IAP does not track</a></li>
             <li><a href="docs/example-debugging-scenario.html">Example debugging scenario</a></li>
@@ -497,7 +420,7 @@ iap verify ./continuity_record.json --registry-public-key-b64 &lt;key&gt;</code>
       <div class="container footer-row">
         <div>
           <p class="footer-title">Identity Anchor Protocol</p>
-          <p class="footer-meta">Registry Version: 0.2.0</p>
+          <p class="footer-meta">Public beta documentation</p>
         </div>
         <ul class="footer-links">
           <li><a href="https://github.com/identity-anchor-protocol" rel="noopener noreferrer">GitHub</a></li>

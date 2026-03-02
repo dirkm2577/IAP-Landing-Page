@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Troubleshooting guide for common IAP beta setup, credential, quota, and continuity issues."
+    />
+    <title>IAP Docs | Troubleshooting</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Docs</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="index.html">Docs Home</a></li>
+            <li><a href="quickstart.html">Quickstart</a></li>
+            <li><a href="../index.html">Landing Page</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section case-hero">
+        <div class="container prose">
+          <p class="eyebrow">Troubleshooting</p>
+          <p class="breadcrumbs"><a href="index.html">Docs</a> / Troubleshooting</p>
+          <h1>Resolve the most common IAP failures</h1>
+          <p>
+            In the current beta, most user-visible failures come from one of these categories: install problems, wrong
+            registry settings, missing credentials, exhausted quota, or sequence mismatch.
+          </p>
+
+          <h2>Start here first</h2>
+          <p>Before changing anything else, run the two standard diagnostics:</p>
+          <pre class="code-block"><code>iap-agent registry check --json
+iap-agent account usage --json</code></pre>
+          <p>
+            These two commands identify most setup problems quickly. If you cannot run
+            <code>account usage</code>, the <code>registry check</code> output is still useful.
+          </p>
+
+          <h2>Package install fails</h2>
+          <ul>
+            <li>Confirm you are inside the intended virtual environment.</li>
+            <li>Upgrade <code>pip</code> before reinstalling the package.</li>
+            <li>Clear the local wheel cache if the install still behaves unexpectedly.</li>
+          </ul>
+          <pre class="code-block"><code>python -m pip install -U pip
+python -m pip cache purge
+python -m pip install -U iap-agent</code></pre>
+
+          <h2>Registry is unreachable</h2>
+          <p>This usually means the registry base URL is wrong or your network cannot reach the service.</p>
+          <ul>
+            <li>Check <code>registry_reachable</code> in <code>iap-agent registry check --json</code>.</li>
+            <li>Confirm the configured registry base is the current beta URL.</li>
+          </ul>
+          <pre class="code-block"><code>iap-agent registry set-base --base "https://registry.ia-protocol.com"
+iap-agent registry check --json</code></pre>
+
+          <h2>No usable local identity</h2>
+          <p>If <code>identity_checked</code> is false, the CLI could not load a valid local identity.</p>
+          <ul>
+            <li>Create a fresh project-local identity if this should be a new agent.</li>
+            <li>Use the correct workspace before retrying issuance.</li>
+          </ul>
+          <pre class="code-block"><code>iap-agent init --project-local --show-public --json
+iap-agent registry check --json</code></pre>
+
+          <h2>Missing or invalid registry API key</h2>
+          <p>
+            If the registry API key is missing, issuance may fall back to payment. If it is invalid, issuance requests
+            can fail directly.
+          </p>
+          <pre class="code-block"><code>iap-agent registry set-api-key --api-key "&lt;API_KEY&gt;"
+iap-agent registry check --json</code></pre>
+          <p>If the key still fails, ask the operator for a replacement key.</p>
+
+          <h2>Missing or invalid account token</h2>
+          <p>
+            If the account token is missing or invalid, <code>iap-agent account usage --json</code> will fail and
+            <code>account_token_valid</code> may be false in <code>registry check</code>.
+          </p>
+          <pre class="code-block"><code>iap-agent account set-token --token "&lt;ACCOUNT_TOKEN&gt;"
+iap-agent account usage --json</code></pre>
+          <p>If the token is invalid, ask the operator to issue a fresh account token.</p>
+
+          <h2>Quota is exhausted</h2>
+          <p>In beta, issuance is blocked when the available quota is exhausted.</p>
+          <ul>
+            <li>Inspect the remaining values in <code>iap-agent account usage --json</code>.</li>
+            <li>Ask the operator whether a quota increase, add-on, or plan change is appropriate.</li>
+            <li>Do not assume the system will silently move you to a higher paid tier.</li>
+          </ul>
+
+          <h2>Continuity request fails with a sequence mismatch</h2>
+          <div class="callout">
+            A sequence mismatch means the registry already has a later continuity sequence for this
+            <code>agent_id</code>. Do not keep retrying the same stale request.
+          </div>
+          <ul>
+            <li>Inspect the registry-side state for the current <code>agent_id</code>.</li>
+            <li>Compare the registry sequence with your local AMCS state.</li>
+            <li>If this should be a separate agent, create a fresh project-local identity instead of reusing the old one.</li>
+          </ul>
+          <pre class="code-block"><code>iap-agent registry status --json
+iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+
+          <h2>Verification fails</h2>
+          <ul>
+            <li>Confirm you are verifying the correct certificate bundle file.</li>
+            <li>In strict mode, provide the saved identity anchor.</li>
+            <li>Use the correct trusted registry public key if you are pinning it manually.</li>
+          </ul>
+          <pre class="code-block"><code>iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-protocol.com" --json
+iap-agent verify ./continuity_record.json --profile strict --registry-public-key-b64 "&lt;REGISTRY_PUBLIC_KEY_B64&gt;" --identity-anchor ./identity_anchor.json --json</code></pre>
+
+          <h2>When to escalate</h2>
+          <p>
+            Escalate when the registry is reachable but behaves inconsistently, verification succeeds on clearly
+            tampered data, or you suspect credentials were leaked.
+          </p>
+          <p>Support and upgrade questions: <a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Troubleshooting guide</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Docs Home</a></li>
+          <li><a href="update-existing-agent.html">Update guide</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

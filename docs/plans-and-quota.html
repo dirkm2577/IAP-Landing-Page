@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Overview of the current IAP beta plans, built-in quotas, add-ons, and how quota is enforced."
+    />
+    <title>IAP Docs | Plans and Quota</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Docs</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="index.html">Docs Home</a></li>
+            <li><a href="beta-onboarding.html">Beta Onboarding</a></li>
+            <li><a href="../index.html">Landing Page</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section case-hero">
+        <div class="container prose">
+          <p class="eyebrow">Quota</p>
+          <p class="breadcrumbs"><a href="index.html">Docs</a> / Plans and quota</p>
+          <h1>Plans and quota</h1>
+          <p>
+            In the current beta, access is quota-gated. Issuance may be payment-gated or entitlement-gated, but the
+            preferred onboarding path is entitlement-based access through operator-created accounts, linked API keys,
+            and account tokens.
+          </p>
+          <p>
+            For approved beta users, access currently starts on the built-in <strong>free</strong> tier at no charge.
+            The free tier is meant for real experimentation, not just a quick demo.
+          </p>
+          <p>
+            If your pilot needs more headroom, operators can extend quota by moving the account to a higher built-in
+            plan or by assigning add-ons. We actively encourage testing and exploration of the protocol —
+            if your use case exceeds the default limits, just let us know.
+          </p>
+
+          <div class="pricing-grid">
+            <div class="price-card">
+              <h2>Free</h2>
+              <p class="price">Built in</p>
+              <p><strong>1</strong> identity anchor, <strong>25</strong> continuity, <strong>1</strong> lineage</p>
+            </div>
+            <div class="price-card">
+              <h2>Starter</h2>
+              <p class="price">Built in</p>
+              <p><strong>3</strong> identity anchor, <strong>100</strong> continuity, <strong>5</strong> lineage</p>
+            </div>
+            <div class="price-card">
+              <h2>Pro</h2>
+              <p class="price">Built in</p>
+              <p><strong>10</strong> identity anchor, <strong>500</strong> continuity, <strong>25</strong> lineage</p>
+            </div>
+          </div>
+
+          <h2>Current built-in add-ons</h2>
+          <ul>
+            <li><code>identity_anchor_2</code></li>
+            <li><code>continuity_50</code></li>
+            <li><code>lineage_5</code></li>
+          </ul>
+
+          <h2>How quota is enforced</h2>
+          <ul>
+            <li>Issuance currently remains API-key-first for the entitlement path.</li>
+            <li>Per-key quota is enforced for account-linked API keys.</li>
+            <li>Account-tier caps are enforced at the account level.</li>
+            <li>Active add-ons increase the effective account cap.</li>
+            <li>If quota is exhausted, issuance is blocked.</li>
+          </ul>
+
+          <div class="callout">
+            The system does not silently move you into a higher plan. If quota is exhausted, the registry returns
+            structured upgrade guidance instead of auto-upgrading your account.
+          </div>
+
+          <h2>How to inspect your current quota</h2>
+          <p>If you have an account token, the fastest check is:</p>
+          <pre class="code-block"><code>iap-agent account usage --json</code></pre>
+          <p>This shows your current tier, whether the account is active, and the remaining issuance counts.</p>
+
+          <h2>When to request higher limits</h2>
+          <ul>
+            <li>Your remaining continuity quota is repeatedly dropping to zero.</li>
+            <li>You are onboarding multiple agents under one account.</li>
+            <li>Your pilot needs more issuance headroom than the current plan allows.</li>
+          </ul>
+
+          <h2>How to prepare a quota request</h2>
+          <div class="callout">
+            Include the expected number of agents, expected continuity volume, and whether you need a plan adjustment or
+            a one-off add-on. That is enough for an operator to review the request.
+          </div>
+
+          <h2>Encouraging experimentation</h2>
+          <p>
+            IAP is in public beta because we want real-world testing.
+            Continuity tracking only becomes meaningful when agents evolve, fork,
+            migrate, and get stressed under real conditions.
+          </p>
+          <p>
+            If you are actively experimenting with identity anchors or high-frequency
+            continuity flows, quota should not be the limiting factor.
+            Send a brief description of your use case and expected volume,
+            and we can adjust limits accordingly.
+          </p>
+
+          <p>Access and quota changes are coordinated through the beta onboarding flow.</p>
+          <p><a href="beta-onboarding.html">Open beta onboarding</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Plans and quota</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Docs Home</a></li>
+          <li><a href="beta-onboarding.html">Beta Onboarding</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

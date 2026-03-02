@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://registry.ia-protocol.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'self'; frame-ancestors 'none'; object-src 'none';" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="description" content="Non-technical user manual for issuing and verifying IAP continuity records with iap-agent." />
+    <meta name="description" content="Polished beta user manual for installing iap-agent, creating a fresh agent identity, issuing certificates, and verifying them offline." />
     <title>IAP User Manual | Identity Anchor Protocol Registry</title>
     <link rel="stylesheet" href="styles.bluecode.css" />
   </head>
@@ -29,22 +29,23 @@
       <section class="hero" aria-labelledby="title">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">User Manual</p>
-            <h1 id="title">From zero to a verified continuity record</h1>
+            <p class="eyebrow">Beta User Manual</p>
+            <h1 id="title">Install, certify, and verify with the current IAP beta</h1>
             <p class="hero-subhead">
-              This guide explains the full flow in plain language: create an agent identity, anchor it once, then issue repeatable continuity records
-              as your agent evolves — and verify everything offline.
+              This is the public beta path: create a local agent identity, append local state into AMCS, request signed
+              certificates from the registry, and verify those certificates offline.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="index.html#quickstart">Back to Quickstart</a>
-              <a class="btn btn-secondary" href="index.html#how">Back to How It Works</a>
+              <a class="btn btn-secondary" href="beta-onboarding.html">Onboarding (beta access)</a>
+              <a class="btn btn-secondary" href="index.html#docs">Browse docs</a>
             </div>
           </div>
 
           <aside class="status-card" aria-label="Key idea">
             <h2>Key idea</h2>
             <p class="status-note">
-              IAP never needs your raw memory. It certifies compact cryptographic <em>commitments</em> (hashes) that you can verify later.
+              IAP beta certifies identity and state continuity. It does not claim deterministic LLM outputs or
+              behavioral continuity.
             </p>
           </aside>
         </div>
@@ -52,173 +53,161 @@
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Glossary (small but important)</h2>
+          <h2>What this guide covers</h2>
           <ul>
-            <li><strong>Agent key pair</strong>: a private key (kept secret) + public key (shareable). Your agent signs requests with the private key.</li>
-            <li><strong>agent_id</strong>: a stable identifier derived from the public key (what verifiers use to refer to “that identity”).</li>
-            <li><strong>Continuity record</strong>: a signed JSON document issued by the Registry that can be verified offline.</li>
-            <li><strong>AMCS</strong>: Agent Memory Canonicalization Standard — a local append-only log that computes a deterministic <code>memory_root</code> and an increasing <code>sequence</code>.</li>
-            <li><strong>memory_root</strong>: a Merkle root hash that represents your current local agent state history.</li>
-            <li><strong>sequence</strong>: an integer counter that increases as your AMCS log grows (1, 2, 3, …).</li>
-            <li><strong>Offline verification</strong>: checking record signatures locally using the Registry public key (no network needed).</li>
+            <li>Install <code>iap-agent</code>.</li>
+            <li>Create a fresh project-local agent identity.</li>
+            <li>Connect the CLI to the IAP Registry.</li>
+            <li>Append local files into AMCS to compute a <code>memory_root</code> and <code>sequence</code>.</li>
+            <li>Issue an identity anchor for a new agent.</li>
+            <li>Issue continuity certificates for later state changes.</li>
+            <li>Verify issued certificates offline.</li>
           </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container prose">
-          <h2>What you will do</h2>
-          <ol>
-            <li>Create your local agent identity (keys).</li>
-            <li>Take all your agent files (Agent/Soul/Skills etc.) OR</li>
-            <li>Write two small “identity files” (an <code>AGENT.md</code> and a <code>SOUL.md</code>).</li>
-            <li>Store them in your local AMCS database so you get a <code>memory_root</code> and <code>sequence</code>.</li>
-            <li>Issue your one-time <strong>Identity Anchor</strong> record.</li>
-            <li>Issue a <strong>Continuity</strong> record for the latest <code>memory_root</code>/<code>sequence</code>.</li>
-            <li>Download the record and verify it locally (if you already saved the Registry public key the signature verification math is done locally.
-              No API call is required during the cryptographic check itself).</li>
-          </ol>
 
           <div class="callout">
-            <p><strong>Good mental model:</strong> Identity Anchor is the agent’s “birth record”. Continuity records are “dated notarizations”
-              that the same agent reached a particular state checkpoint at a particular time.</p>
+            <p>
+              <strong>Mental model:</strong> the identity anchor is the root certificate for a new agent. Continuity
+              certificates are later checkpoints after important changes in agent files for new state roots under the same <code>agent_id</code>.
+            </p>
           </div>
         </div>
       </section>
 
-      <section class="section section-alt">
+      <section class="section">
         <div class="container prose">
-          <h2>Step 1 — Install the tools</h2>
-          <p>On your computer, create a virtual environment and install the IAP command-line tool (<code>iap-agent</code>).</p>
+          <h2>Step 1 — Install the CLI</h2>
           <pre class="code-block"><code>python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
-python -m pip install iap-agent</code></pre>
+python -m pip install -U iap-agent</code></pre>
 
-          <p>Tell the tool where your Registry runs:</p>
-          <pre class="code-block"><code>export REGISTRY_BASE="https://registry.ia-protocol.com"</code></pre>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container prose">
-          <h2>Step 2 — Create your agent identity (keys)</h2>
-          <p>This generates a key pair locally and prints your <code>agent_id</code>. Keep the private key safe.</p>
-          <pre class="code-block"><code>iap-agent init --show-public --json</code></pre>
-          <p>Copy the printed <code>agent_id</code>. You will use it in later steps.</p>
+          <p>Confirm the install:</p>
+          <pre class="code-block"><code>iap-agent --version
+iap-agent version --json</code></pre>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Step 3 — Create the agent (identity) files you want to commit OR</h2>
-          <p>Create two small files. They can be minimal — you can evolve them later.</p>
-          <pre class="code-block"><code>cat &gt; AGENT.md &lt;&lt;'EOF'
-# Atlas
-Role: Personal AI assistant
-EOF
-
-cat &gt; SOUL.md &lt;&lt;'EOF'
-# Purpose
-Help user reliably, safely, and with continuity.
-EOF</code></pre>
+          <h2>Step 2 — Create a fresh project-local identity</h2>
+          <p>
+            Your <code>agent_id</code> is derived from your Ed25519 public key. For a genuinely new agent, prefer a
+            project-local identity so you do not accidentally reuse a global key from another workspace.
+          </p>
+          <pre class="code-block"><code>iap-agent init --project-local --show-public --json</code></pre>
+          <p>Keep the returned <code>agent_id</code>. You will use it throughout the flow.</p>
         </div>
       </section>
 
       <section class="section">
         <div class="container prose">
-          <h2>Step 4 — Store them in AMCS (so you get a memory_root)</h2>
-          <p>AMCS is your local append-only history. When you append events, it produces:</p>
+          <h2>Step 3 — Connect to the registry</h2>
+          <p>
+            Most beta users receive a handoff command from the operator. Run that command exactly as sent. A typical
+            setup command looks like this:
+          </p>
+          <pre class="code-block"><code>iap-agent setup --registry-base "https://registry.ia-protocol.com" --registry-api-key "iapk_live_optional" --account-token "iapt_live_optional" --check --json</code></pre>
+
+          <p>This stores your registry settings and immediately runs a read-only preflight check.</p>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container prose">
+          <h2>Step 4 — Run preflight and quota checks</h2>
+          <p>Before issuing anything, make sure the registry is reachable and your credentials are usable.</p>
+          <pre class="code-block"><code>iap-agent registry check --json
+iap-agent account usage --json</code></pre>
+
+          <p>In a healthy setup, you should see:</p>
           <ul>
-            <li>a new <code>memory_root</code> (hash checkpoint), and</li>
-            <li>a new <code>sequence</code> number.</li>
+            <li><code>registry_reachable: true</code></li>
+            <li><code>identity_checked: true</code></li>
+            <li><code>account_token_valid: true</code> if you were given an account token</li>
           </ul>
-          <p>Append the tracked files into your local AMCS database:</p>
-          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --agent-id &lt;agent_id&gt; --file ./AGENT.md --file ./SOUL.md --json</code></pre>
-          <p>The command prints the latest <code>memory_root</code>.</p>
+        </div>
+      </section>
 
-          <p>You can also confirm root + sequence with:</p>
-          <pre class="code-block"><code>iap-agent amcs root --amcs-db ./amcs.db --agent-id &lt;agent_id&gt; --json</code></pre>
+      <section class="section">
+        <div class="container prose">
+          <h2>Step 5 — Append local state into AMCS</h2>
+          <p>
+            AMCS is the local append-only state store used by the beta. Files only become part of certifiable state
+            after you append them into AMCS.
+          </p>
+          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+
+          <p>These commands give you the current <code>memory_root</code> and <code>sequence</code>.</p>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Step 5 — Issue your Identity Anchor (one-time)</h2>
-          <p>This creates the request. If your account has remaining API-key quota, the Registry may certify it immediately. Otherwise it returns a payment handoff.</p>
+          <h2>Step 6 — Issue the identity anchor for a new agent</h2>
+          <p>The identity anchor binds your <code>agent_id</code> to your local key and should be issued once per new agent.</p>
           <pre class="code-block"><code>iap-agent anchor issue \
-  --registry-base "$REGISTRY_BASE" \
+  --registry-base "https://registry.ia-protocol.com" \
   --agent-name "Atlas" \
   --payment-provider auto \
   --open-browser \
   --json</code></pre>
 
-          <p><strong>Payment options</strong>:</p>
-          <ul>
-            <li><code>auto</code>: tries Stripe first, then Lightning fallback</li>
-            <li><code>stripe</code>: force Stripe checkout</li>
-            <li><code>lightning-btc</code>: force Lightning invoice</li>
-          </ul>
+          <p>Then fetch and save the certificate bundle:</p>
+          <pre class="code-block"><code>iap-agent anchor cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./identity_anchor.json --json</code></pre>
 
-          <p>Tip: add <code>--wait</code> if you want the command to poll until issuance completes.</p>
+          <p>Keep <code>./identity_anchor.json</code>. Strict continuity verification may require it later.</p>
         </div>
       </section>
 
       <section class="section">
         <div class="container prose">
-          <h2>Step 6 — Issue a Continuity record (repeatable)</h2>
-          <p>Continuity is what you will do over time, whenever your agent changes meaningfully (new memory, new config, new capabilities).</p>
+          <h2>Step 7 — Issue a continuity certificate</h2>
+          <p>
+            After local state is in AMCS, request continuity certification for the latest
+            <code>memory_root</code>/<code>sequence</code>.
+          </p>
 
-          <p>1) Create the continuity request from your AMCS database:</p>
-          <pre class="code-block"><code>iap-agent continuity request --registry-base "$REGISTRY_BASE" --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json</code></pre>
 
-          <p>2) If the response is already <code>CERTIFIED</code>, skip payment. Otherwise pay for it using the <code>request_id</code> printed above:</p>
-          <pre class="code-block"><code>iap-agent continuity pay \
-  --registry-base "$REGISTRY_BASE" \
-  --request-id &lt;request_id&gt; \
-  --payment-provider auto \
-  --open-browser \
-  --json</code></pre>
+          <p>If the request is payment-gated, resolve the payment handoff:</p>
+          <pre class="code-block"><code>iap-agent continuity pay --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --payment-provider auto --open-browser --json</code></pre>
 
-          <p>If the Registry reports that the submitted <code>sequence</code> is stale, inspect the current registry state:</p>
-          <pre class="code-block"><code>iap-agent registry status --registry-base "$REGISTRY_BASE" --agent-id &lt;agent_id&gt; --json</code></pre>
-
-          <div class="callout">
-            <p><strong>What the Registry actually checks:</strong> that the request is signed by the anchored agent key, and that the submitted
-              <code>sequence</code> is strictly increasing for that <code>agent_id</code>. The Registry does not inspect your raw files.</p>
-          </div>
+          <p>Wait for certification and fetch the certificate:</p>
+          <pre class="code-block"><code>iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
+iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json</code></pre>
         </div>
       </section>
 
       <section class="section section-alt">
         <div class="container prose">
-          <h2>Step 7 — Download the continuity record and verify it offline</h2>
-          <p>Wait for issuance, fetch the continuity record JSON, then verify it locally:</p>
-          <pre class="code-block"><code>iap-agent continuity wait --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --json
-iap-agent continuity cert --registry-base "$REGISTRY_BASE" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json
-REGISTRY_PUBLIC_KEY_B64="$(curl -s "$REGISTRY_BASE/registry/public-key" | jq -r .public_key_b64)"
-iap-agent verify ./continuity_record.json --registry-public-key-b64 "$REGISTRY_PUBLIC_KEY_B64" --json</code></pre>
-          <p>Expected result:</p>
+          <h2>Step 8 — Verify the certificate offline</h2>
+          <p>
+            Offline verification means the verifier has the certificate payload and a trusted registry public key. For
+            stricter continuity checks, also provide the saved identity anchor.
+          </p>
+          <pre class="code-block"><code>iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-protocol.com" --json
+iap-agent verify ./continuity_record.json --profile strict --registry-public-key-b64 &lt;REGISTRY_PUBLIC_KEY_B64&gt; --identity-anchor ./identity_anchor.json --json</code></pre>
+
+          <p>Successful JSON output looks like:</p>
           <pre class="code-block"><code>{"ok": true, "reason": "ok"}</code></pre>
         </div>
       </section>
 
       <section class="section">
         <div class="container prose">
-          <h2>When should you issue continuity records?</h2>
+          <h2>Common fixes</h2>
           <ul>
-            <li>After a meaningful memory update (new long-term facts, policies, or preferences).</li>
-            <li>After a configuration change (new tools, new permissions, new model version).</li>
-            <li>Before and after a migration (new server, new device).</li>
-            <li>Before publishing results that must be attributable (research checkpoints, financial actions, releases).</li>
+            <li>Wrong registry URL: run <code>iap-agent registry set-base --base "https://registry.ia-protocol.com"</code>.</li>
+            <li>Missing local identity: run <code>iap-agent init --project-local --show-public --json</code>.</li>
+            <li>Missing API key: run <code>iap-agent registry set-api-key --api-key "&lt;API_KEY&gt;"</code>.</li>
+            <li>Missing or invalid account token: run <code>iap-agent account set-token --token "&lt;ACCOUNT_TOKEN&gt;"</code>.</li>
+            <li>Sequence mismatch: run <code>iap-agent registry status --json</code> and compare registry state with local AMCS state.</li>
           </ul>
-          <p>
-            You choose the cadence. The important part is that each record creates an auditable timeline of commitments.
-          </p>
 
           <div class="hero-actions" style="margin-top:1.2rem">
-            <a class="btn btn-primary" href="index.html">Back to the landing page</a>
-            <a class="btn btn-secondary" href="index.html#how">Back to How It Works</a>
+            <a class="btn primary" href="beta-onboarding.html">Onboarding (beta access)</a>
+            <a class="btn btn-secondary" href="index.html">Back to the landing page</a>
           </div>
         </div>
       </section>
@@ -228,7 +217,7 @@ iap-agent verify ./continuity_record.json --registry-public-key-b64 "$REGISTRY_P
       <div class="container footer-row">
         <div>
           <p class="footer-title">Identity Anchor Protocol</p>
-          <p class="footer-meta">User Manual</p>
+          <p class="footer-meta">Beta user manual</p>
         </div>
         <ul class="footer-links">
           <li><a href="https://github.com/identity-anchor-protocol" rel="noopener noreferrer">GitHub</a></li>

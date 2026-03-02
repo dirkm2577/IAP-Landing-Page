@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Quickstart guide for installing iap-agent, creating a fresh agent identity, certifying local state, and verifying the first IAP certificate."
+    />
+    <title>IAP Docs | Quickstart</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Docs</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="index.html">Docs Home</a></li>
+            <li></li><a href="beta-onboarding.html">Onboarding (beta access)</a></li>
+            <li><a href="../index.html">Landing Page</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section case-hero">
+        <div class="container prose">
+          <p class="eyebrow">Quickstart</p>
+          <p class="breadcrumbs"><a href="index.html">Docs</a> / Quickstart</p>
+          <h1>Set up IAP beta and create your first verified certificate</h1>
+          <p>
+            This path is for a fresh beta install. You will install <code>iap-agent</code>, create a project-local
+            identity, connect to the registry, append local state into AMCS, issue certificates, and verify the
+            result offline.
+          </p>
+          <div class="callout">
+            <strong>Before you start:</strong> run these commands inside the project workspace that should become its
+            own agent.
+          </div>
+
+          <h2>1. Install the package</h2>
+          <pre class="code-block"><code>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install iap-agent</code></pre>
+
+          <h2>2. Create a project-local identity</h2>
+          <p>
+            This creates a fresh local Ed25519 identity for the current project and avoids accidentally reusing a
+            global identity from another workspace.
+          </p>
+          <pre class="code-block"><code>iap-agent init --project-local --show-public --json</code></pre>
+
+          <h2>3. Connect to the registry</h2>
+          <p>
+            If the operator sent you a handoff command, run that exact command. A typical setup command looks like
+            this:
+          </p>
+          <pre class="code-block"><code>iap-agent setup --registry-base "https://registry.ia-protocol.com" --registry-api-key "iapk_live_optional" --account-token "iapt_live_optional" --check --json</code></pre>
+
+          <h2>4. Append local state into AMCS</h2>
+          <p>
+            AMCS is the local append-only state store. Append the files you want reflected in certifiable state.
+          </p>
+          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+
+          <h2>5. Issue the identity anchor for a new agent</h2>
+          <p>
+            The identity anchor binds your <code>agent_id</code> to your local key. For a brand-new agent, issue this
+            first.
+          </p>
+          <pre class="code-block"><code>iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --agent-name "Atlas" --payment-provider auto --open-browser --json
+iap-agent anchor cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./identity_anchor.json --json</code></pre>
+
+          <h2>6. Issue a continuity certificate</h2>
+          <p>
+            After local state is in AMCS, request continuity certification for the latest
+            <code>memory_root</code>/<code>sequence</code>.
+          </p>
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json
+iap-agent continuity pay --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --payment-provider auto --open-browser --json
+iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
+iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json</code></pre>
+
+          <h2>7. Verify the certificate offline</h2>
+          <p>
+            In basic mode, the CLI can fetch the registry public key from the configured registry. For strict
+            continuity verification, provide a pinned registry key and the saved identity anchor.
+          </p>
+          <pre class="code-block"><code>iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-protocol.com" --json
+iap-agent verify ./continuity_record.json --profile strict --registry-public-key-b64 &lt;REGISTRY_PUBLIC_KEY_B64&gt; --identity-anchor ./identity_anchor.json --json</code></pre>
+
+          <h2>What success looks like</h2>
+          <ul>
+            <li>A project-local identity exists under <code>./.iap/identity/...</code>.</li>
+            <li><code>iap-agent registry check --json</code> reports <code>registry_reachable: true</code>.</li>
+            <li><code>iap-agent continuity cert</code> writes a certificate bundle to disk.</li>
+            <li><code>iap-agent verify</code> returns <code>{"ok": true, "reason": "ok"}</code>.</li>
+          </ul>
+
+          <h2>Next steps</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3>Need the full flow?</h3>
+              <p>Use the full user manual for setup, quota checks, identity anchors, continuity, and troubleshooting.</p>
+              <p><a href="../iap-user-manual.html">Open the user manual</a></p>
+            </div>
+            <div class="card">
+              <h3>Need beta access?</h3>
+              <p>
+                If you are ready to test IAP with a real agent,
+                request onboarding and include a short description of your expected volume
+                (number of agents and continuity frequency).
+              </p>
+              <p>
+                <a href="beta-onboarding.html">Open beta onboarding</a>
+              </p>
+            </div>
+            <div class="card">
+              <h3>Need help?</h3>
+              <p>Use the troubleshooting page for setup failures, invalid credentials, and sequence mismatches.</p>
+              <p><a href="troubleshooting.html">Open troubleshooting</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Quickstart guide</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Docs Home</a></li>
+          <li><a href="../index.html">Landing Page</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

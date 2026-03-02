@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Beta onboarding guide for the current IAP access model: operator-created accounts, linked API keys, and account tokens."
+    />
+    <title>IAP Docs | Beta Onboarding</title>
+    <link rel="stylesheet" href="../styles.bluecode.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div class="container header-row">
+        <p class="brand">Identity Anchor Protocol Docs</p>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="index.html">Docs Home</a></li>
+            <li><a href="plans-and-quota.html">Plans and Quota</a></li>
+            <li><a href="../index.html">Landing Page</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section case-hero">
+        <div class="container prose">
+          <p class="eyebrow">Beta Onboarding</p>
+          <p class="breadcrumbs"><a href="index.html">Docs</a> / Beta onboarding</p>
+          <h1>Prepare for IAP beta onboarding</h1>
+          <p>
+            The current beta does not use public self-service signup. Onboarding is operator-driven and works through
+            accounts, linked API keys, and account tokens.
+          </p>
+          <div class="callout" style="margin-top: 1rem;">
+            <div class="callout-title">What you will receive</div>
+            <p style="margin: 0.35rem 0 0;">
+              <strong>Entitlement API key:</strong> authorizes certificate issuance and enforces beta quotas.
+              <br />
+              <strong>Account token:</strong> lets you check your usage/status (read-only). It is not the issuance key.
+            </p>
+            <p style="margin: 0.6rem 0 0;">
+              Note: there is no self-service signup during beta — accounts are provisioned manually.
+            </p>
+          </div>
+          <p>
+            For approved users, beta access currently starts on the free tier at no charge. If you need more capacity,
+            operators can extend quota through a higher plan or add-ons after reviewing the pilot requirements.
+          </p>
+
+          <h2>What to prepare before requesting access</h2>
+          <ul>
+            <li>The first agent or workflow you want to certify.</li>
+            <li>The environment where the first beta integration will run.</li>
+            <li>The person responsible for rollout, credentials, and recovery.</li>
+            <li>An estimate of expected continuity volume.</li>
+          </ul>
+
+          <h2>What to send in the onboarding request</h2>
+          <div class="callout">
+            A short onboarding request should include the use case, expected number of agents, expected issuance
+            volume, deployment environment, and any timing constraints for the pilot.
+          </div>
+          <p>Send onboarding requests to <a href="mailto:admin@ia-protocol.com">admin@ia-protocol.com</a>.</p>
+
+          <h2>What the operator does next</h2>
+          <ul>
+            <li>Create your account in the registry.</li>
+            <li>Create a linked API key for entitlement-gated issuance.</li>
+            <li>Create an account token for self-service usage checks.</li>
+            <li>Send you a generated <code>iap-agent setup ...</code> handoff command.</li>
+          </ul>
+
+          <h2>What you do after approval</h2>
+          <ul>
+            <li>Run the handoff command exactly as sent.</li>
+            <li>Run <code>iap-agent registry check --json</code>.</li>
+            <li>Run <code>iap-agent account usage --json</code> if you received an account token.</li>
+            <li>Complete the first setup using the quickstart guide.</li>
+          </ul>
+
+          <h2>Recommended first rollout</h2>
+          <p>
+            Start with one non-critical agent, create a fresh project-local identity, issue the identity anchor first,
+            then validate one continuity certificate before expanding the rollout.
+          </p>
+
+          <div class="card-grid">
+            <div class="card">
+              <h3>Plan sizing</h3>
+              <p>Review the built-in plans and current quota model before requesting access.</p>
+              <p><a href="plans-and-quota.html">Read plans and quota</a></p>
+            </div>
+            <div class="card">
+              <h3>First setup</h3>
+              <p>Once access is approved, use the quickstart to build and verify the first certificate flow.</p>
+              <p><a href="quickstart.html">Open quickstart</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <p class="footer-title">Identity Anchor Protocol</p>
+          <p class="footer-meta">Beta onboarding</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Docs Home</a></li>
+          <li><a href="plans-and-quota.html">Plans and quota</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

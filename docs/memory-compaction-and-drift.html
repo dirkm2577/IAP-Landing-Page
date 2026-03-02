@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Technical note on how memory compaction can change tracked state, and how IAP can help make those changes inspectable."
+    />
     <title>IAP Docs | Memory Compaction and Drift</title>
     <link rel="stylesheet" href="../styles.bluecode.css" />
   </head>
@@ -12,7 +16,14 @@
         <h1>Why Memory Compaction Can Cause Drift</h1>
         <p>Compaction rewrites context structure. The same facts can produce different prompts after compaction.</p>
         <p>This can change downstream behavior without obvious visible changes to users.</p>
-        <p>IAP helps by anchoring checkpoint hashes so hidden rewrites become detectable over time.</p>
+        <p>
+          In the current beta, IAP does not directly analyze compaction. It can still make those changes easier to
+          inspect if the affected files are part of the tracked local state that gets appended into AMCS and later
+          certified.
+        </p>
+        <p>
+          Treat this as a technical reasoning note, not as a separate beta product feature.
+        </p>
         <p><a href="../index.html">Back to landing page</a></p>
       </div>
     </main>

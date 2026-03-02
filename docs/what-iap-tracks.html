@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Short reference for what the current IAP beta actually tracks and certifies."
+    />
     <title>IAP Docs | What IAP Tracks</title>
     <link rel="stylesheet" href="../styles.bluecode.css" />
   </head>
@@ -10,12 +14,21 @@
     <main class="section">
       <div class="container prose">
         <h1>What IAP Tracks</h1>
+        <p>
+          In the current beta, IAP tracks and certifies a narrow set of cryptographic facts. It does not capture the
+          full semantic meaning of your agent.
+        </p>
         <ul>
           <li>Agent identity bindings (public key to agent_id).</li>
-          <li>Ordered state checkpoints (`memory_root`, `sequence`).</li>
-          <li>Declared lineage transitions and key transitions.</li>
+          <li>Ordered state checkpoints (<code>memory_root</code>, <code>sequence</code>).</li>
+          <li>Identity-anchor and continuity certificate artifacts.</li>
+          <li>Declared lineage transitions and key-rotation transitions where those certificate types are used.</li>
           <li>Signed registry artifacts verifiable offline.</li>
         </ul>
+        <p>
+          In practice, the current beta flow records local state into AMCS first, then certifies the resulting
+          <code>memory_root</code> and <code>sequence</code>.
+        </p>
         <p><a href="../index.html">Back to landing page</a></p>
       </div>
     </main>

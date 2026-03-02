@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Short note explaining the difference between LLM randomness and tracked state changes in the current IAP beta."
+    />
     <title>IAP Docs | Model Randomness vs State Mutation</title>
     <link rel="stylesheet" href="../styles.bluecode.css" />
   </head>
@@ -10,9 +14,15 @@
     <main class="section">
       <div class="container prose">
         <h1>Model Randomness vs State Mutation</h1>
-        <p>LLM output randomness comes from sampling. IAP does not change sampling.</p>
-        <p>State mutation comes from changed prompts, memory, tools, policies, or key configuration.</p>
-        <p>IAP tracks those state mutations as signed, ordered checkpoints.</p>
+        <p>LLM output randomness comes from sampling and inference behavior. IAP does not change that.</p>
+        <p>
+          State mutation comes from changes to tracked inputs such as prompts, local memory files, tools, policies, or
+          key configuration.
+        </p>
+        <p>
+          In the current beta, IAP helps by certifying ordered state checkpoints for a given
+          <code>agent_id</code>. It does not make repeated model outputs identical.
+        </p>
         <p><a href="../index.html">Back to landing page</a></p>
       </div>
     </main>
