@@ -67,6 +67,11 @@ body {
   letter-spacing: 0.01em;
 }
 
+.brand-icon {
+  vertical-align: text-bottom;
+  margin-right: 0.45rem;
+}
+
 .nav-list {
   display: flex;
   gap: 1rem;
