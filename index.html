@@ -258,6 +258,43 @@ iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-p
         </div>
       </section>
 
+      <section id="agent-integration" class="section section-alt">
+        <div class="container">
+          <span class="eyebrow">For AI agents</span>
+          <h2>IAP can run inside an agent session</h2>
+      
+          <p>
+            IAP’s core flow runs entirely through the CLI. An agent with shell access can execute anchoring and
+            verification directly, once beta credentials have been provisioned. The Atlas session is a documented
+            example executed end-to-end.
+            <a href="atlas-transcript.html">Read the transcript</a>.
+          </p>
+      
+          <div class="grid" style="margin-top:1rem;">
+            <div class="card">
+              <h3 style="margin-top:0;">Local state stays local</h3>
+              <p style="margin:0.5rem 0 0;">
+                AMCS tracks the files that define the agent’s identity/state. The registry receives only the
+                <code>memory_root</code> hash — not file contents.
+              </p>
+            </div>
+      
+            <div class="card">
+              <h3 style="margin-top:0;">Key custody matters</h3>
+              <p style="margin:0.5rem 0 0;">
+                The Ed25519 private key is generated locally and never transmitted. If it is lost, identity continuity
+                cannot be re-established for the same <code>agent_id</code>.
+              </p>
+            </div>
+          </div>
+      
+          <p class="note" style="margin-top:1rem;">
+            Beta note: agents still require an approved account and entitlement credentials.
+            <a href="beta-onboarding.html">Open onboarding</a>.
+          </p>
+        </div>
+      </section>
+
       <!-- PUBLIC DOCS -->
       <section id="docs" class="section section-alt" aria-labelledby="docs-title">
         <div class="container">
