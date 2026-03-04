@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Lineage Certificates Matter · IAP</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles.bluecode.css">
+  <style>
+    /* Light doc-specific polish while staying within existing system */
+    .doc-hero {
+      padding: 3.25rem 0 1.5rem;
+    }
+    .doc-hero h1 {
+      margin: 0.6rem 0 0.8rem;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .doc-hero .subhead {
+      max-width: 70ch;
+    }
+    .doc-nav {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .doc-nav a {
+      text-decoration: none;
+    }
+    .prose h2, .prose h3, .prose h4 {
+      margin-top: 2rem;
+      scroll-margin-top: 6rem;
+    }
+    .prose hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .prose ul, .prose ol {
+      margin: 0.75rem 0 0.75rem;
+      padding-left: 1.25rem;
+    }
+    .prose li {
+      margin: 0.35rem 0;
+    }
+    .doc-footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header class="doc-hero">
+    <div class="container">
+      <div class="eyebrow">IAP Docs</div>
+      <h1>Why Lineage Certificates Matter</h1>
+      <p class="subhead">How lineage connects new agents to an existing trusted identity history.</p>
+
+      <div class="doc-nav">
+        <a class="btn" href="../index.html#certificates">← Back to certificates</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container prose">
+        <p>A good way to think about the lineage certificate is: it does not certify “my next state.” It certifies “this new agent is descended from that prior agent.”</p>
+<p>A practical use case is agent forking for role separation. For example, you have a parent agent that is already anchored and operating in production. You want to spin up a separate child agent for a narrower task, such as handling customer support, running a specialized research branch, or moving into a new security boundary. The child needs its own keypair and its own `agent_id`, but you want third parties to be able to verify that this child was intentionally derived from, or authorized by, the parent rather than appearing as an unrelated new identity.</p>
+<p>The event flow is roughly:</p>
+<ol>
+<li>A parent agent already exists and has an identity anchor.</li>
+<li>You decide to create a separate child agent instead of continuing under the same key.</li>
+<li>You initialize a new identity for the child, producing a different `agent_id`.</li>
+<li>You issue a lineage request for the child, supplying the parent relationship:</li>
+<p>either `--parent-agent-id`, or `--fork-event-hash`, or both.</p>
+<li>The registry checks the lineage proof policy, for example that the parent anchor exists, or that a parent consent signature is present if that stricter policy is used.</li>
+<li>The registry issues a lineage certificate binding the child agent to that declared parent relationship.</li>
+</ol>
+<p>The value of verifying the lineage certificate after issuance is trust continuity across identity branching. A verifier can confirm:</p>
+<ul>
+<li>the child agent controls its own key and identity</li>
+<li>the registry certified that this child is linked to a known parent</li>
+<li>the claimed parent/child relationship was not invented later in a README or UI label</li>
+<li>the fork or delegation was intentional and cryptographically recorded</li>
+</ul>
+<p>That matters when a user, customer, auditor, or another system asks: “Why should I trust this new agent as part of the same operational family?” The lineage cert gives a verifiable answer. It lets you preserve provenance when splitting one agent into multiple agents, instead of forcing every new child to establish trust from zero.</p>
+<p>In short:</p>
+<ul>
+<li>identity anchor answers: “Who is this agent?”</li>
+<li>continuity answers: “Has this same agent preserved state continuity over time?”</li>
+<li>lineage answers: “How is this new agent related to an earlier trusted agent?”</li>
+</ul>
+
+        <div class="doc-footer muted">
+          <p style="margin:0;">
+            Beta note: IAP certifies identity and state continuity. It does not make LLM output deterministic and it does not prove behavioral continuity.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

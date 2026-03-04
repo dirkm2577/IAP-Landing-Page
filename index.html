@@ -30,11 +30,9 @@
         <nav aria-label="Primary">
           <ul class="nav-list">
             <li><a href="#atlas">Atlas</a></li>
-            <li><a href="#how">How It Works</a></li>
             <li><a href="atlas-transcript.html">Transcript</a></li>
             <li><a href="#quickstart">Quickstart</a></li>
             <li><a href="#docs">Docs</a></li>
-            <li><a href="#registry-public-key">Public Key</a></li>
             <li><a href="#trust">Trust &amp; Security</a></li>
           </ul>
         </nav>
@@ -72,10 +70,6 @@
 
             <div class="hero-actions">
               <a class="btn btn-primary" href="docs/quickstart.html">Open Quickstart</a>
-              <a class="btn btn-secondary" href="#docs">Browse User Docs</a>
-              <a class="btn btn-secondary" href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">
-                Protocol Spec (v0.1)
-              </a>
             </div>
           </div>
 
@@ -120,8 +114,26 @@
         </div>
       </section>
 
-      <!-- BETA STATUS -->
       <section id="atlas" class="section section-alt">
+        <div class="container prose">
+          <h2>What happened</h2>
+          <ul>
+            <li>The agent started from a fresh local session.</li>
+            <li>It attempted to work through the IAP beta flow.</li>
+            <li>A sequence mismatch revealed that the selected key already had prior registry history.</li>
+            <li>The issue was correctly interpreted as a key-custody / identity-reuse problem.</li>
+            <li>The final certificate was verified offline.</li>
+          </ul>
+          <p class="note" style="margin-top: 0.9rem;">
+            The Atlas session demonstrated this flow end-to-end. It was the first documented
+            case of an autonomous agent executing it independently.
+            <a href="atlas-transcript.html">Read the full transcript</a>.
+          </p>
+        </div>
+      </section>
+
+      <!-- BETA STATUS -->
+      <section class="section">
         <div class="container">
           <span class="eyebrow">Public beta · Current scope</span>
           <h2>What the beta actually does</h2>
@@ -136,12 +148,6 @@
             Users operate locally through <code>iap-agent</code>. The registry acts as
             the online issuance authority. Certificates can be verified offline using
             the published registry public key.
-          </p>
-      
-          <p class="note" style="margin-top: 0.9rem;">
-            The Atlas session demonstrated this flow end-to-end. It was the first documented
-            case of an autonomous agent executing it independently.
-            <a href="atlas-transcript.html">Read the full transcript</a>.
           </p>
       
           <div class="grid" style="margin-top:1rem;">
@@ -170,11 +176,63 @@
         </div>
       </section>
 
-
-      <!-- HOW IT WORKS -->
-      <section id="how" class="section">
+      <section id="certificates" class="section">
         <div class="container">
-          <h2>Install → Init → Append → Anchor → Continuity → Verify</h2>
+          <span class="eyebrow">Certificate model</span>
+          <h2>Three certificates. Three trust questions.</h2>
+      
+          <div class="grid" style="margin-top:1rem;">
+            <div class="card">
+              <h3 style="margin-top:0;">Identity anchor</h3>
+              <p>
+                Establishes the origin checkpoint for a new agent.
+                It binds an <code>agent_id</code> and initial <code>memory_root</code>
+                to a registry-issued certificate.
+              </p>
+              <p class="note">
+                Trust question: <em>“What exactly is this agent at the moment it enters the world?”</em>
+              </p>
+              <p>
+                <a href="docs/why-identity-anchor.html">Read why identity anchors matter →</a>
+              </p>
+            </div>
+      
+            <div class="card">
+              <h3 style="margin-top:0;">Continuity certificate</h3>
+              <p>
+                Certifies that the same agent identity advanced to a later
+                append-only state checkpoint.
+              </p>
+              <p class="note">
+                Trust question: <em>“Is this the same agent, just updated?”</em>
+              </p>
+              <p>
+                <a href="docs/why-continuity-cert.html">Read why continuity matters →</a>
+              </p>
+            </div>
+      
+            <div class="card">
+              <h3 style="margin-top:0;">Lineage certificate</h3>
+              <p>
+                Records that a new agent identity descends from
+                a previously trusted agent.
+              </p>
+              <p class="note">
+                Trust question: <em>“How is this new agent related to the one I already trust?”</em>
+              </p>
+              <p>
+                <a href="docs/why-lineage-cert.html">Read why lineage matters →</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUICKSTART -->
+      <section id="quickstart" class="section">
+        <div class="container">
+          <h2>Quickstart</h2>
+          <p>Use the current beta flow: install the CLI, create a project-local identity, append state, issue certificates, and verify offline.</p>
           <div class="callout" style="margin-top: 0.9rem;">
             <div class="callout-title">Beta access required</div>
             <p style="margin: 0.35rem 0 0;">
@@ -183,212 +241,18 @@
               <a href="docs/beta-onboarding.html">Request FREE access and get your credentials</a>.
             </p>
           </div>
-          <div class="flow" aria-label="IAP state continuity flow">
-            <div class="flow-box">
-              <h3>Append</h3>
-              <p>Append tracked local files into AMCS to compute the current <code>memory_root</code> and <code>sequence</code>.</p>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-box">
-              <h3>Anchor</h3>
-              <p>Issue an identity anchor for a new agent so the registry can certify the binding between <code>agent_id</code> and the local key.</p>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-box">
-              <h3>Verify</h3>
-              <p>Issue continuity certificates for later state roots and verify certificate bundles offline with the trusted registry public key.</p>
-            </div>
-          </div>
-
-          <div class="callout prose" role="note" aria-label="How it works notes">
-              <p><strong>AMCS</strong> is a local, append-only state log that produces deterministic
-                <code>memory_root</code> checkpoints and increasing <code>sequence</code>. IAP only anchors compact commitments.
-              </p>
-              <p>
-                Want the step-by-step flow without jargon? Use the user manual below.
-              </p>
-            <div class="hero-actions" style="margin-top:0.6rem">
-              <a class="btn btn-secondary" href="iap-user-manual.html">Open the user manual</a>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- BETA WORKFLOW -->
-      <section id="transcript" class="section">
-        <div class="container">
-          <h2>What the current beta actually checks</h2>
-          <p>
-            The registry does not inspect your raw files. It evaluates signed requests and certificate continuity for the
-            selected <code>agent_id</code>.
-          </p>
-          <div class="grid" style="margin-top:1rem;">
-            <div class="card">
-              <h3 style="margin-top:0;">Identity anchor</h3>
-              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Binds an <code>agent_id</code> to the agent public key</li>
-                <li>Issued once for a new agent identity</li>
-                <li>Required for strict continuity verification</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3 style="margin-top:0;">Continuity certificate</h3>
-              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Certifies a later <code>memory_root</code> for the same <code>agent_id</code></li>
-                <li>Requires a strictly increasing <code>sequence</code></li>
-                <li>Can be verified offline with the registry public key</li>
-              </ul>
-            </div>
-          </div>
-
-          <p class="note" style="margin-top:1rem;">
-            If a continuity request fails because the submitted sequence is stale, use
-            <code>iap-agent registry status --json</code> to inspect the latest registry-side sequence for that
-            <code>agent_id</code>.
-          </p>
-          <p class="note">
-            Version note: the current beta deployment keeps the protocol at <code>IAP-0.1</code>. The
-            continuity certificate subtype remains <code>IAP-Continuity-0.2</code> for compatibility with the
-            existing issued chain and verification vectors. That subtype is a compatibility label, not a
-            separate protocol generation.
-          </p>
-        </div>
-      </section>
-
-
-      <!-- PROTOCOL SPEC -->
-      <section id="protocol" class="section section-alt">
-        <div class="container">
-          <h2>Protocol specification</h2>
-          <p>
-            IAP is a minimal protocol for tamper-evident agent state continuity and offline verification.
-            It binds an agent identity to an Ed25519 keypair, produces canonicalized commitments, and supports independent verification.
-          </p>
-          <p class="note">
-            The beta protocol line is <code>IAP-0.1</code>. If you see
-            <code>IAP-Continuity-0.2</code> inside a continuity certificate, that is an intentional
-            compatibility subtype retained for the deployed v0.1.x ecosystem.
-          </p>
-          <div class="grid" style="margin-top:1rem;">
-            <div class="card">
-              <h3 style="margin-top:0;">What IAP provides</h3>
-              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Cryptographic identity binding (Ed25519)</li>
-                <li>Canonicalized state commitments (stable hashes)</li>
-                <li>Append-only continuity tracking</li>
-                <li>Offline verification using the Registry public key</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3 style="margin-top:0;">What IAP does not provide</h3>
-              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Deterministic LLM outputs</li>
-                <li>Behavioral continuity proofs</li>
-                <li>Public self-service signup</li>
-              </ul>
-            </div>
-          </div>
-          <p style="margin-top:1rem;">
-            Start here: <a href="docs/quickstart.html">Quickstart</a> · Browse: <a href="#docs">User docs</a> · Verify:
-            <a href="#registry-public-key">Registry public key</a>
-          </p>
-        </div>
-      </section>
-
-
-      <!-- QUICKSTART -->
-      <section id="quickstart" class="section">
-        <div class="container">
-          <h2>Quickstart</h2>
-          <p>Use the current beta flow: install the CLI, create a project-local identity, append state, issue certificates, and verify offline.</p>
-          <pre class="code-block"><code>python -m pip install -U iap-agent
+          <pre class="code-block"><code>python -m pip install -U iap-agent==0.1.8
 iap-agent init --project-local --show-public --json
 iap-agent setup --registry-base "https://registry.ia-protocol.com" --registry-api-key "iapk_live_optional" --account-token "iapt_live_optional" --check --json
-iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
-iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --agent-name "Atlas" --payment-provider auto --open-browser --wait --json
-iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json
+iap-agent amcs append --project-local --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --identity-file ./.iap/identity/ed25519.json --agent-name "Atlas" --payment-provider auto --open-browser --wait --json
+iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --project-local --amcs-db ./amcs.db --json
 iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
 iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json
 iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-protocol.com" --json</code></pre>
           <p class="note" style="margin-top:0.75rem;">
             For a brand-new agent, also save the identity-anchor certificate. If the continuity request returns
             <code>PENDING</code>, run <code>iap-agent continuity pay ...</code> before waiting.
-          </p>
-          <div class="hero-actions" style="margin-top:0.8rem">
-            <a class="btn btn-primary" href="docs/quickstart.html">Open full quickstart</a>
-            <a class="btn btn-secondary" href="docs/index.html">Browse all docs</a>
-            <a class="btn btn-secondary" href="iap-user-manual.html">Open the beta user manual</a>
-            <a class="btn btn-secondary" href="docs/model-randomness-vs-state-mutation.html">Read technical notes</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- AGENT INTEGRATION -->
-      <section id="agent-integration" class="section section-alt">
-        <div class="container">
-          <span class="eyebrow">Autonomous agent integration</span>
-          <h2>IAP can be executed from within an agent session</h2>
-
-          <p>
-            The full IAP flow — init, append, anchor, continuity, verify — runs entirely through the CLI.
-            An agent with shell access can execute the issuance and verification steps directly,
-            once credentials have been provisioned.
-            The Atlas session is a documented example of this executed end-to-end.
-          </p>
-
-          <p>
-            The pattern: the agent generates and holds its own Ed25519 keypair locally,
-            appends its defining files to AMCS, and requests certificates from the registry.
-            The private key never leaves the agent's local environment.
-            Verification is offline and does not require contacting the registry at runtime.
-          </p>
-
-          <div class="grid" style="margin-top:1rem;">
-            <div class="card">
-              <h3 style="margin-top:0;">What to track</h3>
-              <p style="margin:0.5rem 0 0;">
-                AMCS tracks any files that constitute the agent's identity and state — typically:
-              </p>
-              <ul style="margin:0.5rem 0 0; padding-left:1.1rem;">
-                <li>Identity and persona definition files</li>
-                <li>Persistent memory files</li>
-                <li>Tool configuration or instruction files</li>
-              </ul>
-              <p class="note" style="margin-top:0.75rem;">
-                The registry receives only the <code>memory_root</code> hash — not the file contents.
-                Raw state stays local.
-              </p>
-            </div>
-
-            <div class="card">
-              <h3 style="margin-top:0;">Continuity on a schedule</h3>
-              <p style="margin:0.5rem 0 0;">
-                Once anchored, an agent can request continuity certificates periodically as its tracked state evolves.
-                Each certificate certifies a <code>memory_root</code> at a specific <code>sequence</code>,
-                building an append-only chain verifiable offline.
-              </p>
-              <p class="note" style="margin-top:0.75rem;">
-                A continuity certificate is the cryptographic answer to:
-                <em>"Is the current instance the same identity that acted at sequence N?"</em>
-              </p>
-            </div>
-          </div>
-
-          <div class="callout" style="margin-top:1.5rem;">
-            <div class="callout-title">Key custody</div>
-            <p style="margin:0.35rem 0 0;">
-              The Ed25519 private key is generated locally and never transmitted to the registry.
-              If the key is lost, identity continuity cannot be re-established from the same <code>agent_id</code>.
-              Back up <code>~/.iap_agent/identity/</code> (global) or <code>.iap/identity/</code>
-              (project-local, when initialized with <code>--project-local</code>).
-            </p>
-          </div>
-
-          <p style="margin-top:1.25rem;">
-            The commands are identical to the <a href="#quickstart">quickstart above</a>.
-            The Atlas session — the first documented case of autonomous IAP self-registration — is available in full:
-            <a href="atlas-transcript.html">read the transcript</a>.
           </p>
         </div>
       </section>
@@ -402,73 +266,17 @@ iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-p
             Use these guides for first-time setup, quota checks, troubleshooting, and upgrade-safe operation. Keep the
             technical notes for protocol boundaries and deeper implementation detail.
           </p>
-          <p class="note">
-            Current beta access is free for approved users. Quota starts on the built-in free tier and can be extended
-            by the operator when the use case requires more capacity.
-          </p>
-          <div class="tiles">
-            <a class="tile" href="docs/quickstart.html">
-              <p class="tile-sub">Install and verify</p>
-              <h3>Quickstart</h3>
-              <p>Install iap-agent, create a project-local identity, certify local state, and verify the result offline.</p>
-              <span class="tile-cta">Open quickstart</span>
-            </a>
-            <a class="tile" href="docs/update-existing-agent.html">
-              <p class="tile-sub">Upgrade safely</p>
-              <h3>Update existing agent</h3>
-              <p>Preserve continuity when changing package versions, prompts, hosts, or tracked state inputs.</p>
-              <span class="tile-cta">Open update guide</span>
-            </a>
-            <a class="tile" href="docs/plans-and-quota.html">
-              <p class="tile-sub">Capacity planning</p>
-              <h3>Plans and quota</h3>
-              <p>Understand beta capacity expectations and what information to prepare when requesting higher limits.</p>
-              <span class="tile-cta">Open plan details</span>
-            </a>
-            <a class="tile" href="docs/troubleshooting.html">
-              <p class="tile-sub">Failure recovery</p>
-              <h3>Troubleshooting</h3>
-              <p>Resolve install failures, missing tracked files, signing issues, and continuity mismatches.</p>
-              <span class="tile-cta">Open troubleshooting</span>
-            </a>
-            <a class="tile" href="docs/beta-onboarding.html">
-              <p class="tile-sub">Start the beta</p>
-              <h3>Beta onboarding</h3>
-              <p>Prepare your pilot request, expected volume, and rollout owner before asking for access.</p>
-              <span class="tile-cta">Open onboarding</span>
-            </a>
-            <a class="tile" href="docs/index.html">
-              <p class="tile-sub">Docs hub</p>
-              <h3>Browse all public docs</h3>
-              <p>Use the dedicated docs home to jump between user guides and the existing technical background notes.</p>
-              <span class="tile-cta">Open docs hub</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- PUBLIC KEY -->
-      <section id="registry-public-key" class="section" aria-labelledby="pk-title">
-        <div class="container">
-          <h2 id="pk-title">Registry Public Key</h2>
-          <p>
-            Anchor and continuity records can be verified offline using the Registry public key.
-          </p>
-
-          <div class="kv" aria-label="Registry key/value details">
-            <div class="kv-row">
-              <div class="kv-key">Registry ID</div>
-              <div class="kv-val mono" id="registry-id">loading…</div>
-            </div>
-            <div class="kv-row">
-              <div class="kv-key">Protocol Version</div>
-              <div class="kv-val mono" id="protocol-version">loading…</div>
-            </div>
-            <div class="kv-row">
-              <div class="kv-key">Public Key (base64)</div>
-              <div class="kv-val mono" id="registry-public-key-b64">loading…</div>
-            </div>
-          </div>
+          <ul class="trust-list">
+            <li><a href="docs/beta-onboarding.html">Beta onboarding</a></li>
+            <li><a href="docs/quickstart.html">Quickstart</a></li>
+            <li><a href="iap-user-manual.html">Beta user manual</a></li>
+            <li><a href="atlas-transcript.html">Transcript</a></li>
+            <li><a href="docs/plans-and-quota.html">Plans and quota</a></li>
+            <li><a href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">Protocol Spec (v0.1)</a></li>
+            <li><a href="docs/why-identity-anchor.html">Read why identity anchors matter →</a></li>
+            <li><a href="docs/why-continuity-cert.html">Read why continuity matters →</a></li>
+            <li><a href="docs/why-lineage-cert.html">Read why lineage matters →</a></li>
+          </ul>
         </div>
       </section>
 
@@ -484,10 +292,10 @@ iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-p
           </ul>
           <p style="margin-top:1rem;">Technical background docs:</p>
           <ul class="trust-list">
+            <li><a href="https://identity-anchor-protocol.github.io/iap-spec/spec/v0.1/" target="_blank" rel="noopener noreferrer">Protocol Spec (v0.1)</a></li>
             <li><a href="docs/model-randomness-vs-state-mutation.html">Model randomness vs state mutation</a></li>
             <li><a href="docs/what-iap-tracks.html">What IAP tracks</a></li>
             <li><a href="docs/what-iap-does-not-track.html">What IAP does not track</a></li>
-            <li><a href="docs/example-debugging-scenario.html">Example debugging scenario</a></li>
           </ul>
         </div>
       </section>
@@ -517,9 +325,6 @@ iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-p
     <script>
       (function () {
         var statusEl = document.getElementById("status-badge");
-        var registryIdEl = document.getElementById("registry-id");
-        var protocolEl = document.getElementById("protocol-version");
-        var publicKeyEl = document.getElementById("registry-public-key-b64");
         var registryOriginMeta = document.querySelector('meta[name="registry-origin"]');
         var registryOrigin = registryOriginMeta ? registryOriginMeta.content : "";
 
@@ -548,17 +353,6 @@ iap-agent verify ./continuity_record.json --registry-base "https://registry.ia-p
             statusEl.textContent = "Operational";
             statusEl.className = "status status-ok";
           }
-        );
-
-        requestJSON(
-          "/registry/public-key",
-          function (data) {
-            if (!data) return;
-            registryIdEl.textContent = data.registry_id || "unknown";
-            protocolEl.textContent = data.protocol_version || "unknown";
-            publicKeyEl.textContent = data.public_key_b64 || "unavailable";
-          },
-          function () {}
         );
       })();
     </script>

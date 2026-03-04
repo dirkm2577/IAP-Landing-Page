@@ -19,7 +19,7 @@
         <nav aria-label="Primary">
           <ul class="nav-list">
             <li><a href="index.html">Docs Home</a></li>
-            <li></li><a href="beta-onboarding.html">Onboarding (beta access)</a></li>
+            <li><a href="beta-onboarding.html">Onboarding (beta access)</a></li>
             <li><a href="../index.html">Landing Page</a></li>
           </ul>
         </nav>
@@ -42,11 +42,25 @@
             own agent.
           </div>
 
+          <div class="card-grid">
+            <div class="card">
+              <h3>Need beta access?</h3>
+              <p>
+                If you are ready to test IAP with a real agent,
+                request onboarding and include a short description of your expected volume
+                (number of agents and continuity frequency).
+              </p>
+              <p>
+                <a href="beta-onboarding.html">Open beta onboarding</a>
+              </p>
+            </div>
+          </div>
+
           <h2>1. Install the package</h2>
           <pre class="code-block"><code>python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
-python -m pip install iap-agent</code></pre>
+python -m pip install iap-agent==0.1.8</code></pre>
 
           <h2>2. Create a project-local identity</h2>
           <p>
@@ -66,15 +80,15 @@ python -m pip install iap-agent</code></pre>
           <p>
             AMCS is the local append-only state store. Append the files you want reflected in certifiable state.
           </p>
-          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
-iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent amcs append --project-local --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent amcs root --project-local --amcs-db ./amcs.db --json</code></pre>
 
           <h2>5. Issue the identity anchor for a new agent</h2>
           <p>
             The identity anchor binds your <code>agent_id</code> to your local key. For a brand-new agent, issue this
             first.
           </p>
-          <pre class="code-block"><code>iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --agent-name "Atlas" --payment-provider auto --open-browser --json
+          <pre class="code-block"><code>iap-agent anchor issue --registry-base "https://registry.ia-protocol.com" --identity-file ./.iap/identity/ed25519.json --agent-name "Atlas" --payment-provider auto --open-browser --wait --json
 iap-agent anchor cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./identity_anchor.json --json</code></pre>
 
           <h2>6. Issue a continuity certificate</h2>
@@ -82,7 +96,7 @@ iap-agent anchor cert --registry-base "https://registry.ia-protocol.com" --reque
             After local state is in AMCS, request continuity certification for the latest
             <code>memory_root</code>/<code>sequence</code>.
           </p>
-          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --project-local --amcs-db ./amcs.db --json
 iap-agent continuity pay --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --payment-provider auto --open-browser --json
 iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
 iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json</code></pre>
@@ -109,17 +123,6 @@ iap-agent verify ./continuity_record.json --profile strict --registry-public-key
               <h3>Need the full flow?</h3>
               <p>Use the full user manual for setup, quota checks, identity anchors, continuity, and troubleshooting.</p>
               <p><a href="../iap-user-manual.html">Open the user manual</a></p>
-            </div>
-            <div class="card">
-              <h3>Need beta access?</h3>
-              <p>
-                If you are ready to test IAP with a real agent,
-                request onboarding and include a short description of your expected volume
-                (number of agents and continuity frequency).
-              </p>
-              <p>
-                <a href="beta-onboarding.html">Open beta onboarding</a>
-              </p>
             </div>
             <div class="card">
               <h3>Need help?</h3>

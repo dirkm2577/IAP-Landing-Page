@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Continuity Certificates Matter · IAP</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles.bluecode.css">
+  <style>
+    /* Light doc-specific polish while staying within existing system */
+    .doc-hero {
+      padding: 3.25rem 0 1.5rem;
+    }
+    .doc-hero h1 {
+      margin: 0.6rem 0 0.8rem;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .doc-hero .subhead {
+      max-width: 70ch;
+    }
+    .doc-nav {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .doc-nav a {
+      text-decoration: none;
+    }
+    .prose h2, .prose h3, .prose h4 {
+      margin-top: 2rem;
+      scroll-margin-top: 6rem;
+    }
+    .prose hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .prose ul, .prose ol {
+      margin: 0.75rem 0 0.75rem;
+      padding-left: 1.25rem;
+    }
+    .prose li {
+      margin: 0.35rem 0;
+    }
+    .doc-footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header class="doc-hero">
+    <div class="container">
+      <div class="eyebrow">IAP Docs</div>
+      <h1>Why Continuity Certificates Matter</h1>
+      <p class="subhead">How continuity certificates help verify an agent’s state evolution over time.</p>
+
+      <div class="doc-nav">
+        <a class="btn" href="../index.html#certificates">← Back to certificates</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container prose">
+        <p>A continuity certificate certifies that the same agent identity advanced to a specific later local state.</p>
+<p>The core use case is proving that an already-known agent has changed in a traceable way without changing who it is. For example, an agent has an anchored starting state, then its instructions, memory, policy files, or internal state evolve. You want to prove that the current state is the legitimate next checkpoint for that same `agent_id`, rather than a different agent pretending to be it.</p>
+<p>A practical example is a production agent whose operating files change over time:</p>
+<ul>
+<li>`AGENT.md` defines role</li>
+<li>`SOUL.md` defines purpose or behavior constraints</li>
+<li>`MEMORY.md` records accumulated state</li>
+<p>You update one or more of those files, append them into AMCS, and get a new `memory_root` and incremented `sequence`. The continuity certificate then certifies that this exact later state belongs to the same agent identity and extends its prior chain.</p>
+</ul>
+<p>The event flow is:</p>
+<ol>
+<li>The agent already has an identity anchor, so its identity and initial state are known.</li>
+<li>The agent’s local tracked state changes.</li>
+<li>You append the changed files to AMCS.</li>
+<li>AMCS produces a new `memory_root` and higher `sequence`.</li>
+<li>You submit a continuity request using that `memory_root` and `sequence`, signed by the same agent key.</li>
+<li>The registry checks that the sequence strictly increases for that same `agent_id`.</li>
+<li>The registry issues a continuity certificate binding that later checkpoint to the same identity.</li>
+</ol>
+<p>The value of verifying a continuity certificate after issuance is that it proves stable identity plus valid state progression. A verifier can confirm:</p>
+<ul>
+<li>the certificate was issued by the registry</li>
+<li>the same `agent_id` signed the request</li>
+<li>the certified `memory_root` matches the claimed local state checkpoint</li>
+<li>the `sequence` is part of a monotonic chain, not a replay or rollback</li>
+</ul>
+<p>That matters when someone needs confidence that the agent is the same agent, just updated. Without continuity, a party can only see “here is a current state.” With continuity, they can see “this is the authenticated next state of the same agent.”</p>
+<p>In short:</p>
+<ul>
+<li>identity anchor answers: “This agent exists and controlled this initial identity/state.”</li>
+<li>continuity answers: “This same agent later reached this newer state.”</li>
+<li>lineage answers: “This different agent descends from another agent.”</li>
+</ul>
+<p>A simple mental model:</p>
+<ul>
+<li>anchor = establish identity</li>
+<li>continuity = evolve identity safely</li>
+<li>lineage = branch identity into a new child</li>
+</ul>
+
+        <div class="doc-footer muted">
+          <p style="margin:0;">
+            Beta note: IAP certifies identity and state continuity. It does not make LLM output deterministic and it does not prove behavioral continuity.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

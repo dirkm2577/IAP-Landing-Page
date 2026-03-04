@@ -39,8 +39,8 @@
 
           <h2>1. Check upgrade readiness first</h2>
           <p>Before changing anything, inspect the current local state and registry expectations.</p>
-          <pre class="code-block"><code>iap-agent upgrade status --registry-base "https://registry.ia-protocol.com" --json
-iap-agent registry status --registry-base "https://registry.ia-protocol.com" --json</code></pre>
+          <pre class="code-block"><code>iap-agent upgrade status --registry-base "https://registry.ia-protocol.com" --project-local --json
+iap-agent registry status --registry-base "https://registry.ia-protocol.com" --identity-file ./.iap/identity/ed25519.json --json</code></pre>
           <p>If this already shows warnings or stale local state, fix that first.</p>
 
           <h2>2. Save the current artifacts</h2>
@@ -57,24 +57,24 @@ iap-agent registry status --registry-base "https://registry.ia-protocol.com" --j
             If <code>upgrade status</code> shows stale local metadata, preview and then apply the safe migration before
             continuing.
           </p>
-          <pre class="code-block"><code>iap-agent upgrade migrate --json
-iap-agent upgrade migrate --apply --json</code></pre>
+          <pre class="code-block"><code>iap-agent upgrade migrate --project-local --json
+iap-agent upgrade migrate --project-local --apply --json</code></pre>
 
           <h2>4. Update the package or local configuration</h2>
           <p>Common examples are package upgrades, prompt changes, host migrations, or tracked file changes.</p>
-          <pre class="code-block"><code>python -m pip install -U iap-agent</code></pre>
+          <pre class="code-block"><code>python -m pip install -U iap-agent==0.1.8</code></pre>
 
           <h2>5. Append the updated local state into AMCS</h2>
           <p>
             After the update, append the files that now represent the current state. Then confirm the new
             <code>memory_root</code> and <code>sequence</code>.
           </p>
-          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
-iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent amcs append --project-local --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent amcs root --project-local --amcs-db ./amcs.db --json</code></pre>
 
           <h2>6. Issue a new continuity certificate</h2>
           <p>Once the updated state is in AMCS, certify it as the next point in the chain.</p>
-          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --project-local --amcs-db ./amcs.db --json
 iap-agent continuity wait --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --timeout-seconds 600 --poll-seconds 5 --json
 iap-agent continuity cert --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --output-file ./continuity_record.json --json</code></pre>
 

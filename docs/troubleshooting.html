@@ -54,7 +54,7 @@ iap-agent account usage --json</code></pre>
           </ul>
           <pre class="code-block"><code>python -m pip install -U pip
 python -m pip cache purge
-python -m pip install -U iap-agent</code></pre>
+python -m pip install -U iap-agent==0.1.8</code></pre>
 
           <h2>Registry is unreachable</h2>
           <p>This usually means the registry base URL is wrong or your network cannot reach the service.</p>
@@ -110,8 +110,8 @@ iap-agent account usage --json</code></pre>
             <li>Compare the registry sequence with your local AMCS state.</li>
             <li>If this should be a separate agent, create a fresh project-local identity instead of reusing the old one.</li>
           </ul>
-          <pre class="code-block"><code>iap-agent registry status --json
-iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent registry status --identity-file ./.iap/identity/ed25519.json --json
+iap-agent amcs root --project-local --amcs-db ./amcs.db --json</code></pre>
 
           <h2>Verification fails</h2>
           <ul>

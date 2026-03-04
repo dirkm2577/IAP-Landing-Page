@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Identity Anchors Matter · IAP</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles.bluecode.css">
+  <style>
+    /* Light doc-specific polish while staying within existing system */
+    .doc-hero {
+      padding: 3.25rem 0 1.5rem;
+    }
+    .doc-hero h1 {
+      margin: 0.6rem 0 0.8rem;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .doc-hero .subhead {
+      max-width: 70ch;
+    }
+    .doc-nav {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .doc-nav a {
+      text-decoration: none;
+    }
+    .prose h2, .prose h3, .prose h4 {
+      margin-top: 2rem;
+      scroll-margin-top: 6rem;
+    }
+    .prose hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .prose ul, .prose ol {
+      margin: 0.75rem 0 0.75rem;
+      padding-left: 1.25rem;
+    }
+    .prose li {
+      margin: 0.35rem 0;
+    }
+    .doc-footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header class="doc-hero">
+    <div class="container">
+      <div class="eyebrow">IAP Docs</div>
+      <h1>Why Identity Anchors Matter</h1>
+      <p class="subhead">What an identity anchor certifies — and what it’s for.</p>
+
+      <div class="doc-nav">
+        <a class="btn" href="../index.html#certificates">← Back to certificates</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container prose">
+        <p>An identity certificate is the first trust anchor for an agent. It binds a specific `agent_id` and an initial local state checkpoint to a registry-issued certificate.</p>
+<p>The core use case is establishing that a new agent is real, self-controlled, and externally attestable before anyone relies on it. It answers the first trust question: “What exactly is this agent at the moment it enters the world?”</p>
+<p>A practical example is launching a new agent into production, a marketplace, or a partner workflow. The agent has a fresh keypair, a new `agent_id`, and an initial set of local files such as:</p>
+<ul>
+<li>`AGENT.md`</li>
+<li>`SOUL.md`</li>
+<li>optionally `MEMORY.md`</li>
+</ul>
+<p>You append those into AMCS, get the first `memory_root`, and issue the identity anchor. That certificate gives outside parties a signed, verifiable checkpoint for the agent’s starting identity and starting state.</p>
+<p>The event flow is:</p>
+<ol>
+<li>You create a new agent identity (new keypair, new `agent_id`).</li>
+<li>You define the initial local state.</li>
+<li>You append that state into AMCS to produce the first `memory_root` and sequence.</li>
+<li>You submit the identity anchor request, signed by the agent’s key.</li>
+<li>The registry verifies the request and issues the identity certificate.</li>
+<li>From that point on, future continuity certificates can extend from this starting point.</li>
+</ol>
+<p>And yes, in most cases it is better to issue the identity certificate right when the agent is created, or as close to creation as possible. That is usually the cleanest workflow because:</p>
+<ul>
+<li>it gives you a canonical starting checkpoint</li>
+<li>it avoids ambiguity about what the “original” state was</li>
+<li>it establishes trust before the agent accumulates later changes</li>
+<li>it makes all later continuity easier to interpret, because there is a clear origin</li>
+</ul>
+<p>If you delay the identity certificate, the agent may already have changed locally multiple times before its first public anchor. Then verifiers can still trust it from the anchor onward, but they lose a clean external proof of the earliest state.</p>
+<p>The value of verifying the identity certificate after issuance is that it proves the agent’s origin point. A verifier can confirm:</p>
+<ul>
+<li>the registry actually issued the certificate</li>
+<li>the certified `agent_id` matches the agent’s public key</li>
+<li>the initial certified `memory_root` matches the claimed starting state</li>
+<li>the trust chain begins from a known, signed checkpoint instead of an unverifiable self-description</li>
+</ul>
+<p>That matters when another system, user, or auditor wants to decide whether to trust the agent at all. Before continuity or lineage matter, identity is the base layer. It establishes:</p>
+<ul>
+<li>who this agent is</li>
+<li>what state it started from</li>
+<li>when that starting point was externally certified</li>
+</ul>
+<p>So the three certificates fit together like this:</p>
+<ul>
+<li>identity certificate: “This agent starts here.”</li>
+<li>continuity certificate: “This same agent later changed to here.”</li>
+<li>lineage certificate: “This new agent descends from that other agent.”</li>
+</ul>
+<p>A simple real-world use case is onboarding a new customer-facing agent. You issue the identity certificate immediately after creating it so partners can verify that the agent they are connecting to is the intended one, with the intended initial role and constraints, before any later updates happen.</p>
+
+        <div class="doc-footer muted">
+          <p style="margin:0;">
+            Beta note: IAP certifies identity and state continuity. It does not make LLM output deterministic and it does not prove behavioral continuity.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

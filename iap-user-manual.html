@@ -17,8 +17,6 @@
         <p class="brand">Identity Anchor Protocol Registry</p>
         <nav aria-label="Primary">
           <ul class="nav-list">
-            <li><a href="index.html#how">How It Works</a></li>
-            <li><a href="index.html#quickstart">Quickstart</a></li>
             <li><a href="index.html#trust">Trust &amp; Security</a></li>
           </ul>
         </nav>
@@ -36,7 +34,7 @@
               certificates from the registry, and verify those certificates offline.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-secondary" href="beta-onboarding.html">Onboarding (beta access)</a>
+              <a class="btn btn-secondary" href="docs/beta-onboarding.html">Onboarding (beta access)</a>
               <a class="btn btn-secondary" href="index.html#docs">Browse docs</a>
             </div>
           </div>
@@ -79,7 +77,7 @@
           <pre class="code-block"><code>python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
-python -m pip install -U iap-agent</code></pre>
+python -m pip install -U iap-agent==0.1.8</code></pre>
 
           <p>Confirm the install:</p>
           <pre class="code-block"><code>iap-agent --version
@@ -135,8 +133,8 @@ iap-agent account usage --json</code></pre>
             AMCS is the local append-only state store used by the beta. Files only become part of certifiable state
             after you append them into AMCS.
           </p>
-          <pre class="code-block"><code>iap-agent amcs append --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
-iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent amcs append --project-local --amcs-db ./amcs.db --file ./AGENT.md --file ./SOUL.md --json
+iap-agent amcs root --project-local --amcs-db ./amcs.db --json</code></pre>
 
           <p>These commands give you the current <code>memory_root</code> and <code>sequence</code>.</p>
         </div>
@@ -148,9 +146,11 @@ iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
           <p>The identity anchor binds your <code>agent_id</code> to your local key and should be issued once per new agent.</p>
           <pre class="code-block"><code>iap-agent anchor issue \
   --registry-base "https://registry.ia-protocol.com" \
+  --identity-file ./.iap/identity/ed25519.json \
   --agent-name "Atlas" \
   --payment-provider auto \
   --open-browser \
+  --wait \
   --json</code></pre>
 
           <p>Then fetch and save the certificate bundle:</p>
@@ -168,7 +168,7 @@ iap-agent amcs root --amcs-db ./amcs.db --json</code></pre>
             <code>memory_root</code>/<code>sequence</code>.
           </p>
 
-          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --amcs-db ./amcs.db --json</code></pre>
+          <pre class="code-block"><code>iap-agent continuity request --registry-base "https://registry.ia-protocol.com" --project-local --amcs-db ./amcs.db --json</code></pre>
 
           <p>If the request is payment-gated, resolve the payment handoff:</p>
           <pre class="code-block"><code>iap-agent continuity pay --registry-base "https://registry.ia-protocol.com" --request-id &lt;request_id&gt; --payment-provider auto --open-browser --json</code></pre>
@@ -202,11 +202,11 @@ iap-agent verify ./continuity_record.json --profile strict --registry-public-key
             <li>Missing local identity: run <code>iap-agent init --project-local --show-public --json</code>.</li>
             <li>Missing API key: run <code>iap-agent registry set-api-key --api-key "&lt;API_KEY&gt;"</code>.</li>
             <li>Missing or invalid account token: run <code>iap-agent account set-token --token "&lt;ACCOUNT_TOKEN&gt;"</code>.</li>
-            <li>Sequence mismatch: run <code>iap-agent registry status --json</code> and compare registry state with local AMCS state.</li>
+            <li>Sequence mismatch: run <code>iap-agent registry status --identity-file ./.iap/identity/ed25519.json --json</code> and compare registry state with local AMCS state.</li>
           </ul>
 
           <div class="hero-actions" style="margin-top:1.2rem">
-            <a class="btn primary" href="beta-onboarding.html">Onboarding (beta access)</a>
+            <a class="btn primary" href="docs/beta-onboarding.html">Onboarding (beta access)</a>
             <a class="btn btn-secondary" href="index.html">Back to the landing page</a>
           </div>
         </div>
